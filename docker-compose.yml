@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:3.6.3
+    volumes:
+      - ./data/mongo:/data/db
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=Asia/Shanghai
+      - MONGO_INITDB_ROOT_USERNAME=tqb-backend
+      - MONGO_INITDB_ROOT_PASSWORD= # fill in password
+      - MONGO_INITDB_DATABASE=tqb-backend
+    container_name: tqb-backend_mongo
+    expose:
+      - "27017"
+    networks:
+      - tqb-backend
+  redis:
+    image: redis:4.0.8
+    expose:
+      - "6379"
+    environment:
+      - TZ=Asia/Shanghai
+    container_name: tqb-backend_redis
+    volumes:
+      - .data/redis:/data
+      - /etc/localtime:/etc/localtime:ro
+    tty: true
+    networks:
+      - tqb-backend
+  app:
+    # TODO
+networks:
+  tqb-backend:
+    driver: overlay

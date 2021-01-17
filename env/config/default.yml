@@ -1,0 +1,21 @@
+app:
+  addr: ":3000"
+  prefix: "/api/v1"
+redis:
+  addr: "localhost:6379"
+  password: ""
+  db: 0
+db:
+  addr: "localhost:27017"
+  db: "tqb-backend"
+  username: ""
+  password: ""
+jwt:
+  secret: "lM9w!EqHYkc7RhlhKyu2"
+  skip: # jwt验证器跳过的目录，使用正则表达式
+
+logConf:
+  log_path: "/app/log"
+  log_file_name: "tqb-backend.log"
+
+debug: true
