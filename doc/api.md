@@ -191,7 +191,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 
 ### \*获取题目列表 GET /question
 
-获取所有剧情列表，不包含剧情详细信息。
+获取所有题目列表，不包含剧情详细信息。
 
 响应：
 
@@ -201,7 +201,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
         {
             "_id": "题目ID",
             "title": "题目标题",
-            "next_scene": ["下一剧情ID1", "下一剧情ID2"]
+            "next_scene": ["下一剧情ID1", "下一剧情ID2"],
+            "status": 0, // 题目状态：0 未解锁，1 正在作答，2 已提交
         }
     ]
 }
