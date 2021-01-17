@@ -16,14 +16,20 @@
 - _id `ObjectId` 题目 ID
 - title `string` 标题
 - desc `string` 描述
-- type `int` 类型：1 选择，2 上传 PDF
-- option `Array<string>` 选项文本（仅选择题）
-- true_option `int` 正确选项索引
-- full_point `float` 总分
+- subquestion `Array<#1>` 题目包含的所有子题信息
 - author `string` 出题人
 - audio `string` 音频 URL（仅听力）
 - time_limit `int` 时限，单位为秒
-- next_scene `Array<#1>` 下一剧情列表
+- next_scene `Array<#2>` 下一剧情列表
+
+subquestion 内的对象：
+
+- type `int` 类型：1 上传 PDF，2 选择
+- desc `string` 子题描述
+- option `Array<string>` 选项文本（仅选择题）
+- true_option `Array<int>` 正确选项下标（仅选择题）
+- full_point `float` 满分值
+- part_point `float` 多选未选全分值（仅选择题）
 
 next_scene 内的对象：
 
@@ -45,7 +51,7 @@ next_scene 内的对象：
 - question_id `ObjectId` 题目 ID
 - time `int` 提交时间
 - file `string` 提交文件 ID（仅上传 PDF）
-- option `int` 选项索引（仅选择题）
+- option `Array<int>` 选项索引（仅选择题）
 - point `float` 提交获得分数，-1 为未评分
 
 ## 学科 subject

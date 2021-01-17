@@ -52,7 +52,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 
 ```json
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U",
+    "expire": 1610880000 // 过期时间
 }
 ```
 
@@ -92,7 +93,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 
 响应：空
 
-### \*获取解锁剧情 GET /user/:id/unlocked_scene
+### \*获取解锁剧情 GET /user/unlocked_scene
 
 获取用户自己所有已解锁剧情。
 
@@ -105,13 +106,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
             "_id": "剧情ID",
             "title": "剧情标题",
             "text": "剧情内容",
+            "from_question": "上一问题ID",
             "next_question": "下一问题ID"
         }
     ]
 }
 ```
 
-### \*获取提交 GET /user/:id/submission
+### \*获取提交 GET /user/submission
 
 获取用户自己所有的提交。
 
@@ -123,8 +125,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
         {
             "_id": "提交ID",
             "time": 1610880000, // 提交时间
-            "file": "提交文件ID",
-            "option": 0, // 提交选项索引
+            "question": {
+                "_id": "题目ID",
+                "title": "题目标题"
+            },
+            "file": "提交文件ID（仅上传 PDF）",
+            "option": [0, 1], // 提交选项索引（仅选择题）
             "point": 5.0 // 该题得分，-1 为未评分
         }
     ]
@@ -151,6 +157,25 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 }
 ```
 
+### \*获取剧情列表 GET /scene
+
+获取所有剧情列表，不包含剧情详细信息。
+
+响应：
+
+```json
+{
+    "scene": [
+        {
+            "_id": "剧情ID",
+            "from_question": "上一题目ID",
+            "next_question": "下一题目ID",
+            "title": "剧情标题"
+        }
+    ]
+}
+```
+
 ### \*获取剧情信息 GET /scene/:id
 
 获取指定剧情信息，仅可获取已解锁或可解锁剧情。
@@ -160,7 +185,25 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 ```json
 {
     "text": "剧情文本",
-    "next_question": "下一题目 ID"
+    "next_question": "下一题目ID"
+}
+```
+
+### \*获取题目列表 GET /question
+
+获取所有剧情列表，不包含剧情详细信息。
+
+响应：
+
+```json
+{
+    "question": [
+        {
+            "_id": "题目ID",
+            "title": "题目标题",
+            "next_scene": ["下一剧情ID1", "下一剧情ID2"]
+        }
+    ]
 }
 ```
 
@@ -174,10 +217,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 {
     "title": "标题",
     "desc": "描述",
-    "type": 1, // 类型：1 选择，2 上传 PDF
-    "option": ["选项1", "选项2"],
-    "true_option": 0, // 正确选项索引
-    "full_point": 5.0, // 总分
+    "subquestion": [
+        {
+            "type": 2,
+            "desc": "描述",
+            "option": ["选项1", "选项2"],
+            "true_option": [0, 1],
+            "full_point": 5.0,
+            "part_point": 2.0
+        },
+        {
+            "type": 1,
+            "desc": "描述",
+            "full_point": 5.0
+        }
+    ],
     "author": "出题人",
     "audio": "音频URL",
     "time_limit": 300, // 时间限制，单位为秒
@@ -198,7 +252,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 
 ```json
 {
-    "option": 0, // 作答选项索引（仅选择题）
+    "option": [0, 1], // 作答选项索引（仅选择题）
     "file": "文件 ID" // 提交 PDF 文件 ID（仅上传 PDF）
 }
 ```
