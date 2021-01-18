@@ -3,11 +3,11 @@ package model
 import (
 	"context"
 	"github.com/KSkun/tqb-backend/config"
-	"github.com/go-pg/pg/v10"
+	"go.mongodb.org/mongo-driver/mongo"
 	"time"
 )
 
-var ErrNotFound error = pg.ErrNoRows
+var ErrNotFound error = mongo.ErrNoDocuments
 
 type ChatModel interface {
 	AddMessage(msg, association, newerID string) error
