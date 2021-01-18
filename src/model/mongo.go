@@ -72,10 +72,10 @@ func session(ctx context.Context, f func(ctx mongo.SessionContext) error) error 
 }
 
 func getDBTx(ctx context.Context) dbTrait {
-	err := mongoClient.Connect(ctx)
-	if err != nil {
-		panic(err)
-	}
+	//err := mongoClient.Connect(ctx)
+	//if err != nil {
+	//	panic(err)
+	//}
 
 	return dbTrait{
 		db: mongoClient.Database(config.C.DB.DB),

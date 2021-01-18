@@ -2,29 +2,28 @@ package model
 
 import (
 	"context"
+	"crypto/rsa"
 	"github.com/KSkun/tqb-backend/config"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"time"
 )
 
 var ErrNotFound error = mongo.ErrNoDocuments
 
-type ChatModel interface {
-	AddMessage(msg, association, newerID string) error
-	GetMessage(association, newerID string) ([]string, error)
-	ClearMessage(association, newerID string) error
-	IncrChattingCounter(association, newerID string) error
-	DecrChattingCounter(association, newerID string) error
-	GetChatCount(association, newerID string) (int, error)
-	Close()
-}
-
 type Model interface {
 	// 关闭数据库连接
 	Close()
 	// 终止操作，用于如事务的取消
 	Abort()
-	// TODO: 将Model层的实现列在这里，然后再去实现model结构体中的对应实现
+	// user
+	GetUser(id primitive.ObjectID) (User, error)
+	GetUserByEmail(email string) (User, bool, error)
+	AddUser(user User) (primitive.ObjectID, error)
+	UpdateUser(id primitive.ObjectID, toUpdate bson.M) error
+	AddPrivateKey(email string, key *rsa.PrivateKey) error
+	GetPrivateKey(email string) (*rsa.PrivateKey, bool, error)
 }
 
 type model struct {

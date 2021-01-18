@@ -13,6 +13,7 @@ db:
 jwt:
   secret: "lM9w!EqHYkc7RhlhKyu2"
   skip: # jwt验证器跳过的目录，使用正则表达式
+    - "/api/v1/user/public_key"
 
 logConf:
   log_path: "/app/log"

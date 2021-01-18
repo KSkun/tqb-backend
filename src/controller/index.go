@@ -9,12 +9,6 @@ import (
 	"net/http"
 )
 
-// TODO: 完成controller
-
-func HelloWorldHandler(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello World!")
-}
-
 // HTTPErrorHandler 替换默认的错误处理，统一成目前使用的格式
 func HTTPErrorHandler(err error, c echo.Context) {
 	httpError, ok := err.(*echo.HTTPError)
