@@ -137,6 +137,26 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 }
 ```
 
+### \*获取用户信息 GET /user
+
+获取用户自己的详细信息。
+
+响应：
+
+```json
+{
+    "_id": "用户ID",
+    "username": "用户名",
+    "email": "邮箱",
+    "is_email_verified": true, // 邮箱是否验证
+    "last_question": "最后题目ID",
+    "last_scene": "最后剧情ID",
+    "start_time": 1610880000, // 最后做题开始时间
+    "unlocked_scene": ["解锁剧情ID"],
+    "finished_question": ["已做答问题ID"]
+}
+```
+
 ## 题目相关
 
 ### \*获取学科列表 GET /subject
@@ -188,6 +208,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
     "next_question": "下一题目ID"
 }
 ```
+
+### \*标记剧情选择 POST /scene/:id/done
+
+标记剧情已被选中。
+
+响应：无
 
 ### \*获取题目列表 GET /question
 
@@ -241,13 +267,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
             "scene": "剧情ID",
             "option": "选项文本"
         }
-    ]
+    ],
+    "status": 0, // 题目状态：0 未解锁，1 正在作答，2 已提交
 }
 ```
 
-### \*提交题目解答 POST /qustion/:id/submission
+### \*标记开始答题 POST /question/:id/start
 
-提交题目解答，仅可提交当前题目。
+标记开始作答某问题，用于统计状态与计时。
+
+响应：无
+
+### \*提交题目解答 POST /question/:id/submission
+
+调用前先调用标记开始答题接口。提交题目解答，仅可提交当前题目。计时题目在计时结束后 10s 自动结束答题。
 
 请求：
 

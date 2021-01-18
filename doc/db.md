@@ -7,7 +7,8 @@
 - password `string` 密码（加密）
 - email `string` 邮箱地址
 - is_email_verified `bool` 邮箱是否验证
-- last_question `ObjectId` 最后做的题目，用于实现继续答题
+- last_question `ObjectId` 最后做的题目
+- last_scene `ObjectId` 最后看的剧情
 - start_time `int` 最后做题开始时间
 - unlocked_scene `Array<ObjectId>` 已解锁剧情列表
 
