@@ -2,8 +2,8 @@ package model
 
 import (
 	"context"
-	"github.com/go-pg/pg/v10"
 	"github.com/KSkun/tqb-backend/config"
+	"github.com/go-pg/pg/v10"
 	"time"
 )
 

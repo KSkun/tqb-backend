@@ -1,8 +1,8 @@
 package util
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"github.com/KSkun/tqb-backend/config"
+	"github.com/dgrijalva/jwt-go"
 	"time"
 )
 

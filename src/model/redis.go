@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/go-redis/redis/v7"
 	"github.com/KSkun/tqb-backend/config"
+	"github.com/go-redis/redis/v7"
 )
 
 // 使用文档 https://redis.uptrace.dev/#executing-commands

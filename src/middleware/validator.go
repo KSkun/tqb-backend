@@ -1,6 +1,6 @@
 package middleware
 
-import validator "gopkg.in/go-playground/validator.v9"
+import "gopkg.in/go-playground/validator.v9"
 
 // Validator 参数验证器
 type Validator struct {

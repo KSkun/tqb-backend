@@ -1,10 +1,10 @@
 package context
 
 import (
-	"github.com/dgrijalva/jwt-go"
-	"github.com/labstack/echo/v4"
 	"github.com/KSkun/tqb-backend/config"
 	"github.com/KSkun/tqb-backend/util"
+	"github.com/dgrijalva/jwt-go"
+	"github.com/labstack/echo/v4"
 )
 
 // GetAssociationFromJWT 获得JWTClaims
