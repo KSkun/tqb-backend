@@ -27,6 +27,8 @@ type Model interface {
 	AddVerifyID(email string, id string) error
 	GetVerifyID(id string) (string, bool, error)
 	GetVerifyIDByEmail(email string) (string, bool, error)
+	// subject
+	GetSubjectList() ([]Subject, error)
 }
 
 type model struct {
