@@ -7,11 +7,11 @@ import (
 )
 
 func initUserRouter(g *echo.Group) {
-	g.Add(echo.GET, "/public_key", controller.UserGetPublicKey)
-	g.Add(echo.GET, "/token", controller.UserGetToken)
-	g.Add(echo.POST, "", controller.UserAddUser)
-	g.Add(echo.GET, "/email_verify", controller.UserSendVerifyMail)
-	g.Add(echo.POST, "/email_verify", controller.UserVerifyEmail)
-	g.Add(echo.PUT, "/password", controller.UserChangePassword)
-	g.Add(echo.GET, "", controller.UserGetInfo, middleware.JWTMiddleware())
+	g.GET("/public_key", controller.UserGetPublicKey)
+	g.GET("/token", controller.UserGetToken)
+	g.POST("", controller.UserAddUser)
+	g.GET("/email_verify", controller.UserSendVerifyMail)
+	g.POST("/email_verify", controller.UserVerifyEmail)
+	g.PUT("/password", controller.UserChangePassword)
+	g.GET("", controller.UserGetInfo, middleware.JWTMiddleware())
 }

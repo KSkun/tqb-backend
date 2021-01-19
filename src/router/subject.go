@@ -9,5 +9,5 @@ import (
 func initSubjectGroup(g *echo.Group) {
 	g.Use(middleware.JWTMiddleware())
 
-	g.Add(echo.GET, "", controller.SubjectGetList)
+	g.GET("", controller.SubjectGetList)
 }

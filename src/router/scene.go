@@ -9,7 +9,7 @@ import (
 func initSceneGroup(g *echo.Group) {
 	g.Use(middleware.JWTMiddleware())
 
-	g.Add(echo.GET, "", controller.SceneGetList)
-	g.Add(echo.GET, "/:id", controller.SceneGetInfo)
-	g.Add(echo.POST, "/:id/unlock", controller.SceneSetUnlock)
+	g.GET("", controller.SceneGetList)
+	g.GET("/:id", controller.SceneGetInfo)
+	g.POST("/:id/unlock", controller.SceneSetUnlock)
 }
