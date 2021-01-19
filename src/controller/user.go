@@ -143,6 +143,7 @@ func UserAddUser(ctx echo.Context) error {
 		Password:        string(pwEncrypt),
 		Email:           req.Email,
 		IsEmailVerified: false,
+		UnlockedScene:   make([]primitive.ObjectID, 0),
 	}
 	id, err := m.AddUser(user)
 	if err != nil {
@@ -271,7 +272,7 @@ func UserChangePassword(ctx echo.Context) error {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)
 	}
 
-	err = m.UpdateUser(user.ID, bson.M{"password": pwEncrypt})
+	err = m.UpdateUser(user.ID, bson.M{"password": string(pwEncrypt)})
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)
 	}
