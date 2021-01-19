@@ -1,6 +1,11 @@
 app:
   addr: ":3000"
   prefix: "/api/v1"
+mail:
+  addr: ""
+  password: ""
+  smtp_host: ""
+  smtp_port: 0
 redis:
   addr: "localhost:6379"
   password: ""

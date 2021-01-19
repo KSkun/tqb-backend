@@ -14,16 +14,9 @@ func GetJWTClaims(c echo.Context) *util.JWTClaims {
 
 //获得payload中指定字段的值
 func GetUserFromJWT(c echo.Context) string {
-	return getJWTField(c, "user")
-}
-
-func getJWTField(c echo.Context, fieldName string) string {
 	token := c.Get(config.JWTContextKey)
 	if token != nil {
-		if tokenStr, ok := token.(*jwt.Token).Claims.(jwt.MapClaims)[fieldName].(string); ok {
-			return tokenStr
-		}
-		return ""
+		return token.(*jwt.Token).Claims.(*util.JWTClaims).User
 	}
 	return ""
 }

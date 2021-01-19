@@ -28,6 +28,7 @@ const (
 // Config 配置
 type Config struct {
 	App     app     `yaml:"app"`
+	Mail    mail    `yaml:"mail"`
 	DB      db      `yaml:"db"`
 	Redis   redis   `yaml:"redis"`
 	JWT     jwt     `yaml:"jwt"`
@@ -38,6 +39,13 @@ type Config struct {
 type app struct {
 	Addr   string `yaml:"addr"`
 	Prefix string `yaml:"prefix"`
+}
+
+type mail struct {
+	Addr     string `yaml:"addr"`
+	Password string `yaml:"password"`
+	SMTPHost string `yaml:"smtp_host"`
+	SMTPPort int    `yaml:"smtp_port"`
 }
 
 type db struct {
@@ -55,7 +63,6 @@ type redis struct {
 
 type jwt struct {
 	Secret string   `yaml:"secret"`
-	Skip   []string `yaml:"skip"`
 }
 
 type logConf struct {

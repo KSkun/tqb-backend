@@ -24,6 +24,9 @@ type Model interface {
 	UpdateUser(id primitive.ObjectID, toUpdate bson.M) error
 	AddPrivateKey(email string, key *rsa.PrivateKey) error
 	GetPrivateKey(email string) (*rsa.PrivateKey, bool, error)
+	AddVerifyID(email string, id string) error
+	GetVerifyID(id string) (string, bool, error)
+	GetVerifyIDByEmail(email string) (string, bool, error)
 }
 
 type model struct {

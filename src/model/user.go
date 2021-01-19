@@ -4,6 +4,7 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"fmt"
+	"github.com/KSkun/tqb-backend/util/log"
 	"github.com/go-redis/redis/v7"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -14,7 +15,11 @@ const colNameUser = "user"
 
 const (
 	timePrivateKey = time.Minute * 15 // 15 min
-	keyPrivateKey = "privkey:%s"
+	keyPrivateKey = "priv_key:%s"
+	timeVerifyID = time.Minute // 15 min
+	keyVerifyID = "verify_id:%s"
+	timeVerifyEmail = time.Minute // 1 min
+	keyVerifyEmail = "verify_email:%s"
 )
 
 type User struct {
@@ -81,4 +86,42 @@ func (m *model) GetPrivateKey(email string) (*rsa.PrivateKey, bool, error) {
 		return &rsa.PrivateKey{}, false, err
 	}
 	return key, true, nil
+}
+
+func (m *model) AddVerifyID(email string, id string) error {
+	err := redisClient.Set(fmt.Sprintf(keyVerifyID, id), email, timeVerifyID).Err()
+	if err != nil {
+		return err
+	}
+	err = redisClient.Set(fmt.Sprintf(keyVerifyEmail, email), id, timeVerifyEmail).Err()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *model) GetVerifyID(id string) (string, bool, error) {
+	result := redisClient.Get(fmt.Sprintf(keyVerifyID, id))
+	if result.Err() == redis.Nil {
+		return "", false, nil
+	}
+	if result.Err() != nil {
+		return "", false, result.Err()
+	}
+	resultDel := redisClient.Del(fmt.Sprintf(keyVerifyID, id))
+	if resultDel.Err() != nil && resultDel.Err() != redis.Nil {
+		log.Logger.Error(resultDel.Err())
+	}
+	return result.Val(), true, nil
+}
+
+func (m *model) GetVerifyIDByEmail(email string) (string, bool, error) {
+	result := redisClient.Get(fmt.Sprintf(keyVerifyEmail, email))
+	if result.Err() == redis.Nil {
+		return "", false, nil
+	}
+	if result.Err() != nil {
+		return "", false, result.Err()
+	}
+	return result.Val(), true, nil
 }

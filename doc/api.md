@@ -91,9 +91,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 
 响应：无
 
-### (\*)修改密码 PUT /user/password?verify_id={验证邮箱ID}
+### 修改密码 PUT /user/password?verify_id={验证邮箱ID}
 
-修改密码，调用前使用获取公钥接口。用户登录后可不加修改密码 ID。
+修改密码，调用前使用获取公钥接口。必须先验证邮箱。
 
 请求：
 
