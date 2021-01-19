@@ -16,6 +16,9 @@ func InitRouter(g *echo.Group) {
 
 	sceneGroup := g.Group("/scene")
 	initSceneGroup(sceneGroup)
+
+	questionGroup := g.Group("/question")
+	initQuestionGroup(questionGroup)
 }
 
 func initIndexRouter(g *echo.Group) {

@@ -34,6 +34,9 @@ type Model interface {
 	// scene
 	GetSceneList() ([]Scene, error)
 	GetScene(id primitive.ObjectID) (Scene, error)
+	// question
+	GetQuestionList() ([]Question, error)
+	GetQuestion(id primitive.ObjectID) (Question, error)
 }
 
 type model struct {

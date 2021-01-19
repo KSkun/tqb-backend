@@ -17,7 +17,7 @@
 - _id `ObjectId` 题目 ID
 - title `string` 标题
 - desc `string` 描述
-- subquestion `Array<#1>` 题目包含的所有子题信息
+- sub_question `Array<#1>` 题目包含的所有子题信息
 - author `string` 出题人
 - audio `string` 音频 URL（仅听力）
 - time_limit `int` 时限，单位为秒

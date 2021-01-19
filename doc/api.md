@@ -258,7 +258,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 {
     "title": "标题",
     "desc": "描述",
-    "subquestion": [
+    "sub_question": [
         {
             "type": 2,
             "desc": "描述",
