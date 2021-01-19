@@ -13,6 +13,9 @@ func InitRouter(g *echo.Group) {
 
 	subjectGroup := g.Group("/subject")
 	initSubjectGroup(subjectGroup)
+
+	sceneGroup := g.Group("/scene")
+	initSceneGroup(sceneGroup)
 }
 
 func initIndexRouter(g *echo.Group) {

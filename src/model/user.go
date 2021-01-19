@@ -125,3 +125,27 @@ func (m *model) GetVerifyIDByEmail(email string) (string, bool, error) {
 	}
 	return result.Val(), true, nil
 }
+
+func (m *model) SetUserLastScene(id primitive.ObjectID, sceneID primitive.ObjectID) error {
+	c := m.db.Collection(colNameUser)
+	_, err := c.UpdateOne(m.ctx, bson.M{"_id": id}, bson.M{
+		"$set": bson.M{"last_scene": sceneID},
+		"$addToSet": bson.M{"unlocked_scene": sceneID},
+	})
+	return err
+}
+
+func (m *model) UserHasUnlockedScene(id primitive.ObjectID, sceneID primitive.ObjectID) (bool, error) {
+	c := m.db.Collection(colNameUser)
+	err := c.FindOne(m.ctx, bson.M{
+		"_id": id,
+		"unlocked_scene": bson.M{"$elemMatch": bson.M{"$eq": sceneID}},
+	}).Err()
+	if err == ErrNotFound {
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}

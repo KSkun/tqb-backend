@@ -27,8 +27,13 @@ type Model interface {
 	AddVerifyID(email string, id string) error
 	GetVerifyID(id string) (string, bool, error)
 	GetVerifyIDByEmail(email string) (string, bool, error)
+	SetUserLastScene(id primitive.ObjectID, sceneID primitive.ObjectID) error
+	UserHasUnlockedScene(id primitive.ObjectID, sceneID primitive.ObjectID) (bool, error)
 	// subject
 	GetSubjectList() ([]Subject, error)
+	// scene
+	GetSceneList() ([]Scene, error)
+	GetScene(id primitive.ObjectID) (Scene, error)
 }
 
 type model struct {
