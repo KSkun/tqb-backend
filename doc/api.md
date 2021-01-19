@@ -79,9 +79,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 }
 ```
 
-### 重发验证邮件 GET /user/email_verify?email={邮箱地址}
+### 发送验证邮件 GET /user/email_verify?email={邮箱地址}
 
-重发验证邮件。
+发送验证邮件。
 
 响应：无
 
@@ -91,13 +91,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 
 响应：无
 
-### 请求修改密码 GET /user/reset_mail?email={邮箱地址}
-
-向邮箱发送一封带有修改密码链接的邮件，若用户不存在则不发送邮件且不提供响应。
-
-响应：空
-
-### (\*)修改密码 PUT /user/password?reset_id={修改密码ID}
+### (\*)修改密码 PUT /user/password?verify_id={验证邮箱ID}
 
 修改密码，调用前使用获取公钥接口。用户登录后可不加修改密码 ID。
 
