@@ -71,7 +71,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 }
 ```
 
-响应：空
+响应：
+
+```json
+{
+    "_id": "用户ID"
+}
+```
+
+### 验证邮箱 POST /user/email_verify?verify_id={验证邮箱ID}
+
+进行邮箱验证，注册时会发送一个包含验证邮箱 ID 的邮件，通过此接口进行验证。
+
+响应：无
 
 ### 请求修改密码 GET /user/reset_mail?email={邮箱地址}
 
