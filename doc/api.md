@@ -79,6 +79,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 }
 ```
 
+### 重发验证邮件 GET /user/email_verify?email={邮箱地址}
+
+重发验证邮件。
+
+响应：无
+
 ### 验证邮箱 POST /user/email_verify?verify_id={验证邮箱ID}
 
 进行邮箱验证，注册时会发送一个包含验证邮箱 ID 的邮件，通过此接口进行验证。
