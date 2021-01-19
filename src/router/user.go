@@ -7,4 +7,5 @@ import (
 
 func initUserRouter(g *echo.Group) {
 	g.Add(echo.GET, "/public_key", controller.UserGetPublicKey)
+	g.Add(echo.GET, "/token", controller.UserGetToken)
 }
