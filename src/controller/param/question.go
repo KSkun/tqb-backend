@@ -15,7 +15,6 @@ type ObjRspSubQuestion struct {
 	Type       int      `json:"type"`
 	Desc       string   `json:"desc"`
 	Option     []string `json:"option"`
-	TrueOption []int    `json:"true_option"`
 	FullPoint  float32  `json:"full_point"`
 	PartPoint  float32  `json:"part_point"`
 }

@@ -73,7 +73,7 @@ func QuestionGetInfo(ctx echo.Context) error {
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
-	if scene.NextQuestion != id { // TODO: 增加已提交问题的判断
+	if scene.NextQuestion != id && user.LastQuestion != id { // TODO: 增加已提交问题的判断
 		return context.Error(ctx, http.StatusForbidden, "this question is locked", nil)
 	}
 
@@ -88,7 +88,6 @@ func QuestionGetInfo(ctx echo.Context) error {
 			Type:       subQuestion.Type,
 			Desc:       subQuestion.Desc,
 			Option:     subQuestion.Option,
-			TrueOption: subQuestion.TrueOption,
 			FullPoint:  subQuestion.FullPoint,
 			PartPoint:  subQuestion.PartPoint,
 		})
@@ -144,6 +143,9 @@ func QuestionSetStart(ctx echo.Context) error {
 	}
 	if scene.NextQuestion != id {
 		return context.Error(ctx, http.StatusForbidden, "you cannot answer this question", nil)
+	}
+	if user.LastQuestion == id {
+		return context.Error(ctx, http.StatusBadRequest, "you have already started this question", nil)
 	}
 
 	err = m.UpdateUser(userID, bson.M{"last_question": id, "start_time": time.Now().Unix()})

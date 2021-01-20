@@ -263,7 +263,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
             "type": 2,
             "desc": "描述",
             "option": ["选项1", "选项2"],
-            "true_option": [0, 1],
             "full_point": 5.0,
             "part_point": 2.0
         },

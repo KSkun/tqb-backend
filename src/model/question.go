@@ -13,7 +13,7 @@ type SubQuestion struct {
 	Option     []string `bson:"option"`
 	TrueOption []int    `bson:"true_option"`
 	FullPoint  float32  `bson:"full_point"`
-	PartPoint  float32  `bson:"full_point"`
+	PartPoint  float32  `bson:"part_point"`
 }
 
 type NextScene struct {
