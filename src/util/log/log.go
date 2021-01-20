@@ -1,10 +1,12 @@
 package log
 
 import (
+	"fmt"
 	"github.com/KSkun/tqb-backend/config"
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
+	"os"
 	"path"
 	"time"
 )
@@ -39,6 +41,12 @@ func getLogger() *logrus.Logger {
 	}
 
 	logConfig := config.C.LogConf
+	if _, err := os.Stat(logConfig.LogPath); os.IsNotExist(err) {
+		err := os.MkdirAll(logConfig.LogPath, os.ModePerm)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 
 	baseLogPath := path.Join(logConfig.LogPath, logConfig.LogFileName)
 	writer, err := rotatelogs.New(
