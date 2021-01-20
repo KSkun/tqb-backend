@@ -29,6 +29,7 @@ type User struct {
 	Email            string               `bson:"email"`
 	IsEmailVerified  bool                 `bson:"is_email_verified"`
 	LastQuestion     primitive.ObjectID   `bson:"last_question"`
+	LLastQuestion    primitive.ObjectID   `bson:"l_last_question"`
 	LastScene        primitive.ObjectID   `bson:"last_scene"`
 	StartTime        int64                `bson:"start_time"`
 	UnlockedScene    []primitive.ObjectID `bson:"unlocked_scene"`
@@ -136,6 +137,32 @@ func (m *model) SetUserLastScene(id primitive.ObjectID, sceneID primitive.Object
 	return err
 }
 
+func (m *model) SetUserLastQuestion(id primitive.ObjectID, questionID primitive.ObjectID) error {
+	c := m.db.Collection(colNameUser)
+	_, err := c.Aggregate(m.ctx, []bson.M{
+		{"$match": bson.M{"_id": id}},
+		{"$set": bson.M{
+			"l_last_question": "$last_question",
+			"last_question":   questionID,
+			"start_time":      time.Now().Unix(),
+		}},
+	})
+	return err
+}
+
+func (m *model) SetUserBackQuestion(id primitive.ObjectID) error {
+	c := m.db.Collection(colNameUser)
+	_, err := c.Aggregate(m.ctx, []bson.M{
+		{"$match": bson.M{"_id": id}},
+		{"$set": bson.M{
+			"last_question":   "$l_last_question",
+			"l_last_question": primitive.ObjectID{},
+			"start_time":      time.Now().Unix(),
+		}},
+	})
+	return err
+}
+
 func (m *model) AddUserFinishedQuestion(id primitive.ObjectID, questionID primitive.ObjectID) error {
 	c := m.db.Collection(colNameUser)
 	_, err := c.UpdateOne(m.ctx, bson.M{"_id": id}, bson.M{
@@ -162,7 +189,7 @@ func (m *model) UserHasUnlockedScene(id primitive.ObjectID, sceneID primitive.Ob
 func (m *model) UserHasFinishedQuestion(id primitive.ObjectID, questionID primitive.ObjectID) (bool, error) {
 	c := m.db.Collection(colNameUser)
 	err := c.FindOne(m.ctx, bson.M{
-		"_id":            id,
+		"_id":               id,
 		"finished_question": bson.M{"$elemMatch": bson.M{"$eq": questionID}},
 	}).Err()
 	if err == ErrNotFound {

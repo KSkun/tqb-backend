@@ -5,6 +5,7 @@ import (
 	"github.com/KSkun/tqb-backend/model"
 	"github.com/KSkun/tqb-backend/util/context"
 	"github.com/labstack/echo/v4"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 )
@@ -87,13 +88,25 @@ func SceneSetUnlock(ctx echo.Context) error {
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
-	if user.LastQuestion != scene.FromQuestion {
+	if user.LastQuestion != scene.FromQuestion && scene.FromQuestion != model.NullID { // 排除入口剧情
 		return context.Error(ctx, http.StatusForbidden, "you cannot unlock this scene", nil)
 	}
 
 	err = m.SetUserLastScene(userID, id)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)
+	}
+
+	// 如果走到最后一个剧情，则清空用户状态
+	if scene.NextQuestion == model.NullID {
+		err = m.UpdateUser(userID, bson.M{
+			"last_scene":      model.NullID,
+			"last_question":   model.NullID,
+			"l_last_question": model.NullID,
+		})
+		if err != nil {
+			return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)
+		}
 	}
 	return context.Success(ctx, nil)
 }

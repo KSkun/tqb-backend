@@ -5,7 +5,6 @@ import (
 	"github.com/KSkun/tqb-backend/model"
 	"github.com/KSkun/tqb-backend/util/context"
 	"github.com/labstack/echo/v4"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 	"time"
@@ -160,10 +159,11 @@ func QuestionSetStart(ctx echo.Context) error {
 		return context.Error(ctx, http.StatusBadRequest, "you have already started this question", nil)
 	}
 
-	err = m.UpdateUser(userID, bson.M{"last_question": id, "start_time": time.Now().Unix()})
+	err = m.SetUserLastQuestion(userID, id)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)
 	}
+	go timedOutWorker(userID, id)
 	return context.Success(ctx, nil)
 }
 
@@ -201,6 +201,7 @@ func isAllChoice(question model.Question) bool {
 	return true
 }
 
+// 判断提交是否合法
 func validateSubmission(req param.ReqQuestionAddSubmission, question model.Question) bool {
 	subCnt := len(question.SubQuestion)
 	if len(req.File) != subCnt || len(req.Option) != subCnt { // 与子题数不符合
@@ -219,6 +220,12 @@ func validateSubmission(req param.ReqQuestionAddSubmission, question model.Quest
 		}
 	}
 	return true
+}
+
+// 判断问题是否已超时
+func isQuestionTimedOut(user model.User, question model.Question) bool {
+	return time.Now().After(time.Unix(user.StartTime, 0).
+		Add(time.Second * time.Duration(question.TimeLimit + 10)))
 }
 
 func QuestionAddSubmission(ctx echo.Context) error {
@@ -269,9 +276,7 @@ func QuestionAddSubmission(ctx echo.Context) error {
 	if user.LastQuestion != id {
 		return context.Error(ctx, http.StatusForbidden, "you are not answering this question", nil)
 	}
-	if question.TimeLimit != 0 &&
-		time.Now().After(time.Unix(user.StartTime, 0).
-			Add(time.Second * time.Duration(question.TimeLimit + 10))) { // 超时
+	if question.TimeLimit != 0 && isQuestionTimedOut(user, question) { // 超时
 		return context.Error(ctx, http.StatusForbidden, "the time limit is exceeded", nil)
 	}
 	hasFinished, err := m.UserHasFinishedQuestion(userID, id)

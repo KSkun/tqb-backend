@@ -12,6 +12,8 @@ import (
 
 var ErrNotFound error = mongo.ErrNoDocuments
 
+var NullID = primitive.ObjectID{}
+
 type Model interface {
 	// 关闭数据库连接
 	Close()
@@ -28,6 +30,8 @@ type Model interface {
 	GetVerifyID(id string) (string, bool, error)
 	GetVerifyIDByEmail(email string) (string, bool, error)
 	SetUserLastScene(id primitive.ObjectID, sceneID primitive.ObjectID) error
+	SetUserLastQuestion(id primitive.ObjectID, questionID primitive.ObjectID) error
+	SetUserBackQuestion(id primitive.ObjectID) error
 	AddUserFinishedQuestion(id primitive.ObjectID, questionID primitive.ObjectID) error
 	UserHasUnlockedScene(id primitive.ObjectID, sceneID primitive.ObjectID) (bool, error)
 	UserHasFinishedQuestion(id primitive.ObjectID, questionID primitive.ObjectID) (bool, error)
