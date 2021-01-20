@@ -141,8 +141,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
                 "_id": "题目ID",
                 "title": "题目标题"
             },
-            "file": "提交文件ID（仅上传 PDF）",
-            "option": [0, 1], // 提交选项索引（仅选择题）
+            "file": ["提交文件ID（仅上传 PDF）"],
+            "option": [[0, 1]], // 提交选项索引（仅选择题）
             "point": 5.0 // 该题得分，-1 为未评分
         }
     ]
@@ -295,12 +295,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 
 调用前先调用标记开始答题接口。提交题目解答，仅可提交当前题目。计时题目在计时结束后 10s 自动结束答题。
 
+**注意：由于设计允许选择和上传 PDF 混合，此处的 `option` 与 `file` 都需要与 `sub_question` 的下标对应。如该子问题为选择题，则 `file` 对应位置存空串；如果为上传 PDF，则 `option` 对应位置存空列表。**
+
 请求：
 
 ```json
 {
-    "option": [0, 1], // 作答选项索引（仅选择题）
-    "file": "文件 ID" // 提交 PDF 文件 ID（仅上传 PDF）
+    "option": [[0, 1]], // 作答选项索引（仅选择题）
+    "file": ["文件 ID"] // 提交 PDF 文件 ID（仅上传 PDF）
 }
 ```
 

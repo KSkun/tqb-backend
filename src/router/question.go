@@ -12,4 +12,5 @@ func initQuestionGroup(g *echo.Group) {
 	g.GET("", controller.QuestionGetList)
 	g.GET("/:id", controller.QuestionGetInfo)
 	g.POST("/:id/start", controller.QuestionSetStart)
+	g.POST("/:id/submission", controller.QuestionAddSubmission)
 }

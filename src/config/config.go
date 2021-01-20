@@ -37,8 +37,9 @@ type Config struct {
 }
 
 type app struct {
-	Addr   string `yaml:"addr"`
-	Prefix string `yaml:"prefix"`
+	Addr      string `yaml:"addr"`
+	Prefix    string `yaml:"prefix"`
+	UploadDir string `yaml:"upload_dir"`
 }
 
 type mail struct {
@@ -62,7 +63,7 @@ type redis struct {
 }
 
 type jwt struct {
-	Secret string   `yaml:"secret"`
+	Secret string `yaml:"secret"`
 }
 
 type logConf struct {

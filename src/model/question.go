@@ -7,13 +7,18 @@ import (
 
 const colNameQuestion = "question"
 
+const (
+	TypePDF    = 1
+	TypeChoice = 2
+)
+
 type SubQuestion struct {
 	Type       int      `bson:"type"`
 	Desc       string   `bson:"desc"`
 	Option     []string `bson:"option"`
 	TrueOption []int    `bson:"true_option"`
-	FullPoint  float32  `bson:"full_point"`
-	PartPoint  float32  `bson:"part_point"`
+	FullPoint  float64  `bson:"full_point"`
+	PartPoint  float64  `bson:"part_point"`
 }
 
 type NextScene struct {

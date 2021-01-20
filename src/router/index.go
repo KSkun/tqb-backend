@@ -1,6 +1,8 @@
 package router
 
 import (
+	"github.com/KSkun/tqb-backend/controller"
+	"github.com/KSkun/tqb-backend/middleware"
 	"github.com/labstack/echo/v4"
 )
 
@@ -22,5 +24,6 @@ func InitRouter(g *echo.Group) {
 }
 
 func initIndexRouter(g *echo.Group) {
-
+	g.POST("/file", controller.FileUpload, middleware.JWTMiddleware())
+	g.GET("/file/:id", controller.FileGet, middleware.JWTMiddleware())
 }

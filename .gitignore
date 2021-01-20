@@ -1,6 +1,7 @@
 docker-compose-prod.yml
 env/config/prod.yml
 env/config/debug.yml
+env/upload
 
 go.sum
 

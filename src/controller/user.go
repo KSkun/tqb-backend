@@ -34,6 +34,9 @@ func UserGetPublicKey(ctx echo.Context) error {
 	defer m.Close()
 
 	key, found, err := m.GetPrivateKey(req.Email)
+	if err != nil {
+		return context.Error(ctx, http.StatusInternalServerError, "failed to generate rsa key", err)
+	}
 	if !found {
 		key, err = rsa.GenerateKey(rand.Reader, 1024)
 		if err != nil {
@@ -46,7 +49,7 @@ func UserGetPublicKey(ctx echo.Context) error {
 	}
 	publicKey, err := x509.MarshalPKIXPublicKey(&key.PublicKey)
 	if err != nil {
-		return context.Error(ctx, http.StatusInternalServerError, "failed to generate public key", err)
+		return context.Error(ctx, http.StatusInternalServerError, "failed to generate rsa key", err)
 	}
 	publicKeyPem := pem.EncodeToMemory(&pem.Block{
 		Type:  "RSA PUBLIC KEY",
@@ -96,10 +99,10 @@ func UserGetToken(ctx echo.Context) error {
 
 	token, expire, err := util.GenerateJWTToken(util.JWTClaims{
 		StandardClaims: jwt.StandardClaims{
-			IssuedAt:  time.Now().Unix(),
-			Subject:   "tuiqunbei",
+			IssuedAt: time.Now().Unix(),
+			Subject:  "tuiqunbei",
 		},
-		User:           user.ID.Hex(),
+		User: user.ID.Hex(),
 	})
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to generate token", err)
@@ -139,11 +142,12 @@ func UserAddUser(ctx echo.Context) error {
 	}
 
 	user := model.User{
-		Username:        req.Username,
-		Password:        string(pwEncrypt),
-		Email:           req.Email,
-		IsEmailVerified: false,
-		UnlockedScene:   make([]primitive.ObjectID, 0),
+		Username:         req.Username,
+		Password:         string(pwEncrypt),
+		Email:            req.Email,
+		IsEmailVerified:  false,
+		UnlockedScene:    make([]primitive.ObjectID, 0),
+		FinishedQuestion: make([]primitive.ObjectID, 0),
 	}
 	id, err := m.AddUser(user)
 	if err != nil {
@@ -297,7 +301,9 @@ func UserGetInfo(ctx echo.Context) error {
 	}
 
 	finishedQuestion := make([]string, 0)
-	// TODO: 补充已完成题目的逻辑
+	for _, id := range user.FinishedQuestion {
+		finishedQuestion = append(finishedQuestion, id.Hex())
+	}
 
 	return context.Success(ctx, param.RspUserGetInfo{
 		ID:               user.ID.Hex(),
@@ -310,4 +316,44 @@ func UserGetInfo(ctx echo.Context) error {
 		UnlockedScene:    unlockedScene,
 		FinishedQuestion: finishedQuestion,
 	})
+}
+
+func UserGetSubmission(ctx echo.Context) error {
+	idHex := context.GetUserFromJWT(ctx)
+	id, _ := primitive.ObjectIDFromHex(idHex)
+
+	m := model.GetModel()
+	defer m.Close()
+
+	submissionList, err := m.GetSubmissionByUser(id)
+	if err != nil {
+		return context.Error(ctx, http.StatusInternalServerError, "failed to get submission info", err)
+	}
+
+	submissionListRet := make([]param.ObjRspSubmission, 0)
+	for _, submission := range submissionList {
+		question, err := m.GetQuestion(submission.Question)
+		if err != nil {
+			return context.Error(ctx, http.StatusInternalServerError, "failed to get submission info", err)
+		}
+		questionRet := param.ObjRspSubmissionQuestion{
+			ID:    question.ID.Hex(),
+			Title: question.Title,
+		}
+
+		fileRet := make([]string, 0)
+		for _, file := range submission.File {
+			fileRet = append(fileRet, file.Hex())
+		}
+
+		submissionListRet = append(submissionListRet, param.ObjRspSubmission{
+			ID:       submission.ID.Hex(),
+			Time:     submission.Time,
+			Question: questionRet,
+			File:     fileRet,
+			Option:   submission.Option,
+			Point:    submission.Point,
+		})
+	}
+	return context.Success(ctx, param.RspUserGetSubmission{Submission: submissionListRet})
 }

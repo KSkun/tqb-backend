@@ -1,5 +1,11 @@
 package param
 
+const (
+	StatusUnlock    = 0 // 未解锁
+	StatusAnswering = 1 // 正在作答
+	StatusFinish    = 2 // 已提交
+)
+
 type ObjRspQuestion struct {
 	ID        string   `json:"_id"`
 	Title     string   `json:"title"`
@@ -12,11 +18,11 @@ type RspQuestionGetList struct {
 }
 
 type ObjRspSubQuestion struct {
-	Type       int      `json:"type"`
-	Desc       string   `json:"desc"`
-	Option     []string `json:"option"`
-	FullPoint  float32  `json:"full_point"`
-	PartPoint  float32  `json:"part_point"`
+	Type      int      `json:"type"`
+	Desc      string   `json:"desc"`
+	Option    []string `json:"option"`
+	FullPoint float64  `json:"full_point"`
+	PartPoint float64  `json:"part_point"`
 }
 
 type ObjRspNextScene struct {
@@ -33,4 +39,13 @@ type RspQuestionGetInfo struct {
 	TimeLimit   int                 `json:"time_limit"`
 	NextScene   []ObjRspNextScene   `json:"next_scene"`
 	Status      int                 `json:"status"`
+}
+
+type ReqQuestionAddSubmission struct {
+	Option [][]int  `json:"option"`
+	File   []string `json:"file"`
+}
+
+type RspQuestionAddSubmission struct {
+	ID string `json:"_id"`
 }

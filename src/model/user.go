@@ -14,24 +14,25 @@ import (
 const colNameUser = "user"
 
 const (
-	timePrivateKey = time.Minute * 15 // 15 min
-	keyPrivateKey = "priv_key:%s"
-	timeVerifyID = time.Minute // 15 min
-	keyVerifyID = "verify_id:%s"
+	timePrivateKey  = time.Minute * 15 // 15 min
+	keyPrivateKey   = "priv_key:%s"
+	timeVerifyID    = time.Minute // 15 min
+	keyVerifyID     = "verify_id:%s"
 	timeVerifyEmail = time.Minute // 1 min
-	keyVerifyEmail = "verify_email:%s"
+	keyVerifyEmail  = "verify_email:%s"
 )
 
 type User struct {
-	ID              primitive.ObjectID   `bson:"_id"`
-	Username        string               `bson:"username"`
-	Password        string               `bson:"password"`
-	Email           string               `bson:"email"`
-	IsEmailVerified bool                 `bson:"is_email_verified"`
-	LastQuestion    primitive.ObjectID   `bson:"last_question"`
-	LastScene       primitive.ObjectID   `bson:"last_scene"`
-	StartTime       int64                `bson:"start_time"`
-	UnlockedScene   []primitive.ObjectID `bson:"unlocked_scene"`
+	ID               primitive.ObjectID   `bson:"_id"`
+	Username         string               `bson:"username"`
+	Password         string               `bson:"password"`
+	Email            string               `bson:"email"`
+	IsEmailVerified  bool                 `bson:"is_email_verified"`
+	LastQuestion     primitive.ObjectID   `bson:"last_question"`
+	LastScene        primitive.ObjectID   `bson:"last_scene"`
+	StartTime        int64                `bson:"start_time"`
+	UnlockedScene    []primitive.ObjectID `bson:"unlocked_scene"`
+	FinishedQuestion []primitive.ObjectID `bson:"finished_question"`
 }
 
 func (m *model) GetUser(id primitive.ObjectID) (User, error) {
@@ -129,8 +130,16 @@ func (m *model) GetVerifyIDByEmail(email string) (string, bool, error) {
 func (m *model) SetUserLastScene(id primitive.ObjectID, sceneID primitive.ObjectID) error {
 	c := m.db.Collection(colNameUser)
 	_, err := c.UpdateOne(m.ctx, bson.M{"_id": id}, bson.M{
-		"$set": bson.M{"last_scene": sceneID},
+		"$set":      bson.M{"last_scene": sceneID},
 		"$addToSet": bson.M{"unlocked_scene": sceneID},
+	})
+	return err
+}
+
+func (m *model) AddUserFinishedQuestion(id primitive.ObjectID, questionID primitive.ObjectID) error {
+	c := m.db.Collection(colNameUser)
+	_, err := c.UpdateOne(m.ctx, bson.M{"_id": id}, bson.M{
+		"$addToSet": bson.M{"finished_question": questionID},
 	})
 	return err
 }
@@ -138,8 +147,23 @@ func (m *model) SetUserLastScene(id primitive.ObjectID, sceneID primitive.Object
 func (m *model) UserHasUnlockedScene(id primitive.ObjectID, sceneID primitive.ObjectID) (bool, error) {
 	c := m.db.Collection(colNameUser)
 	err := c.FindOne(m.ctx, bson.M{
-		"_id": id,
+		"_id":            id,
 		"unlocked_scene": bson.M{"$elemMatch": bson.M{"$eq": sceneID}},
+	}).Err()
+	if err == ErrNotFound {
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (m *model) UserHasFinishedQuestion(id primitive.ObjectID, questionID primitive.ObjectID) (bool, error) {
+	c := m.db.Collection(colNameUser)
+	err := c.FindOne(m.ctx, bson.M{
+		"_id":            id,
+		"finished_question": bson.M{"$elemMatch": bson.M{"$eq": questionID}},
 	}).Err()
 	if err == ErrNotFound {
 		return false, nil

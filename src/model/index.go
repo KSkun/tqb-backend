@@ -28,7 +28,9 @@ type Model interface {
 	GetVerifyID(id string) (string, bool, error)
 	GetVerifyIDByEmail(email string) (string, bool, error)
 	SetUserLastScene(id primitive.ObjectID, sceneID primitive.ObjectID) error
+	AddUserFinishedQuestion(id primitive.ObjectID, questionID primitive.ObjectID) error
 	UserHasUnlockedScene(id primitive.ObjectID, sceneID primitive.ObjectID) (bool, error)
+	UserHasFinishedQuestion(id primitive.ObjectID, questionID primitive.ObjectID) (bool, error)
 	// subject
 	GetSubjectList() ([]Subject, error)
 	// scene
@@ -37,6 +39,12 @@ type Model interface {
 	// question
 	GetQuestionList() ([]Question, error)
 	GetQuestion(id primitive.ObjectID) (Question, error)
+	// submission
+	GetSubmissionByUser(userID primitive.ObjectID) ([]Submission, error)
+	AddSubmission(submission Submission) (primitive.ObjectID, error)
+	// file
+	AddFile(file File) (primitive.ObjectID, error)
+	GetFile(id primitive.ObjectID) (File, error)
 }
 
 type model struct {

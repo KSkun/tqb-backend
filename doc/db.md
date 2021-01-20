@@ -11,6 +11,7 @@
 - last_scene `ObjectId` 最后看的剧情
 - start_time `int` 最后做题开始时间
 - unlocked_scene `Array<ObjectId>` 已解锁剧情列表
+- finished_question `Array<ObjectId>` 已做答问题列表
 
 ## 题目 question
 
@@ -48,10 +49,10 @@ next_scene 内的对象：
 ## 提交 submission
 
 - _id `ObjectId` 提交 ID
-- author_id `ObjectId` 答题人 ID
-- question_id `ObjectId` 题目 ID
+- user `ObjectId` 答题人 ID
+- question `ObjectId` 题目 ID
 - time `int` 提交时间
-- file `string` 提交文件 ID（仅上传 PDF）
+- file `Array<string>` 提交文件 ID（仅上传 PDF）
 - option `Array<int>` 选项索引（仅选择题）
 - point `float` 提交获得分数，-1 为未评分
 
