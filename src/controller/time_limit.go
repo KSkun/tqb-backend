@@ -35,6 +35,9 @@ func timedOutWorker(userID primitive.ObjectID, questionID primitive.ObjectID) {
 		return
 	}
 	m.Close()
+	if question.TimeLimit == 0 {
+		return
+	}
 
 	time.Sleep(time.Second * time.Duration(question.TimeLimit + 10))
 

@@ -45,18 +45,18 @@ func SceneGetInfo(ctx echo.Context) error {
 	defer m.Close()
 
 	// 检查用户是否有权限查看该剧情
-	unlocked, err := m.UserHasUnlockedScene(userID, id)
-	if err != nil {
-		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
-	}
-	if !unlocked {
-		return context.Error(ctx, http.StatusForbidden, "this scene is locked", nil)
-	}
-
 	scene, err := m.GetScene(id)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get scene info", err)
 	}
+	unlocked, err := m.UserHasUnlockedScene(userID, id)
+	if err != nil {
+		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
+	}
+	if !unlocked && scene.FromQuestion != model.NullID {
+		return context.Error(ctx, http.StatusForbidden, "this scene is locked", nil)
+	}
+
 	return context.Success(ctx, param.RspSceneGetInfo{
 		Title:        scene.Title,
 		Text:         scene.Text,

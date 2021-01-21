@@ -16,7 +16,7 @@ const colNameUser = "user"
 const (
 	timePrivateKey  = time.Minute * 15 // 15 min
 	keyPrivateKey   = "priv_key:%s"
-	timeVerifyID    = time.Minute // 15 min
+	timeVerifyID    = time.Minute * 15 // 15 min
 	keyVerifyID     = "verify_id:%s"
 	timeVerifyEmail = time.Minute // 1 min
 	keyVerifyEmail  = "verify_email:%s"
@@ -139,8 +139,7 @@ func (m *model) SetUserLastScene(id primitive.ObjectID, sceneID primitive.Object
 
 func (m *model) SetUserLastQuestion(id primitive.ObjectID, questionID primitive.ObjectID) error {
 	c := m.db.Collection(colNameUser)
-	_, err := c.Aggregate(m.ctx, []bson.M{
-		{"$match": bson.M{"_id": id}},
+	_, err := c.UpdateOne(m.ctx, bson.M{"_id": id}, []bson.M{
 		{"$set": bson.M{
 			"l_last_question": "$last_question",
 			"last_question":   questionID,
@@ -152,8 +151,7 @@ func (m *model) SetUserLastQuestion(id primitive.ObjectID, questionID primitive.
 
 func (m *model) SetUserBackQuestion(id primitive.ObjectID) error {
 	c := m.db.Collection(colNameUser)
-	_, err := c.Aggregate(m.ctx, []bson.M{
-		{"$match": bson.M{"_id": id}},
+	_, err := c.UpdateOne(m.ctx, bson.M{"_id": id}, []bson.M{
 		{"$set": bson.M{
 			"last_question":   "$l_last_question",
 			"l_last_question": primitive.ObjectID{},
