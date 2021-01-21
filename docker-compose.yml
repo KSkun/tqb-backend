@@ -17,7 +17,7 @@ services:
     networks:
       - tqb-backend
   redis:
-    image: redis:6.0.10
+    image: redis:6.0.10-alpine
     expose:
       - "6379"
     environment:
@@ -37,10 +37,13 @@ services:
       - TZ=Asia/Shanghai
       - ENV=default
     container_name: tqb-backend_app
-    expose: 
+    ports:  
       - "30002:3000" # 设置为自己的端口号
     networks:
       - tqb-backend
+    depends_on: 
+      - mongo
+      - redis
 networks:
   tqb-backend:
     driver: overlay
