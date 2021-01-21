@@ -1,11 +1,12 @@
 app:
   addr: ":3000"
   prefix: "/api/v1"
+  upload_dir: "upload"
 mail:
-  addr: ""
-  password: ""
-  smtp_host: ""
-  smtp_port: 0
+  addr: "*email address*" # 需填写
+  password: "*email password*" # 需填写
+  smtp_host: "*smtp server address*" # 需填写
+  smtp_port: 465
 redis:
   addr: "localhost:6379"
   password: ""
@@ -16,13 +17,10 @@ db:
   username: ""
   password: ""
 jwt:
-  secret: "lM9w!EqHYkc7RhlhKyu2"
-  skip: # jwt验证器跳过的目录，使用正则表达式
-    - "/api/v1/user/public_key"
-    - "/api/v1/user/token"
+  secret: "*jwt secret*" # 需填写
 
 logConf:
-  log_path: "/app/log"
+  log_path: "log"
   log_file_name: "tqb-backend.log"
 
-debug: true
+debug: true # 调试模式开关
