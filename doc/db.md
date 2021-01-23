@@ -55,6 +55,7 @@ next_scene 内的对象：
 - file `Array<string>` 提交文件 ID（仅上传 PDF）
 - option `Array<int>` 选项索引（仅选择题）
 - point `float` 提交获得分数，-1 为未评分
+- answer_time `int` 答题用时，单位为秒
 
 ## 学科 subject
 

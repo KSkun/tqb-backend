@@ -59,12 +59,13 @@ type ObjRspSubmissionQuestion struct {
 }
 
 type ObjRspSubmission struct {
-	ID       string                   `json:"_id"`
-	Time     int64                    `json:"time"`
-	Question ObjRspSubmissionQuestion `json:"question"`
-	File     []string                 `json:"file"`
-	Option   [][]int                  `json:"option"`
-	Point    float64                  `json:"point"`
+	ID         string                   `json:"_id"`
+	Time       int64                    `json:"time"`
+	Question   ObjRspSubmissionQuestion `json:"question"`
+	File       []string                 `json:"file"`
+	Option     [][]int                  `json:"option"`
+	Point      float64                  `json:"point"`
+	AnswerTime int                      `json:"answer_time"`
 }
 
 type RspUserGetSubmission struct {

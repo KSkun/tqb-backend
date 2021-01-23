@@ -143,7 +143,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
             },
             "file": ["提交文件ID（仅上传 PDF）"],
             "option": [[0, 1]], // 提交选项索引（仅选择题）
-            "point": 5.0 // 该题得分，-1 为未评分
+            "point": 5.0, // 该题得分，-1 为未评分
+            "answer_time": 0 // 答题用时
         }
     ]
 }

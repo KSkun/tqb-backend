@@ -347,12 +347,13 @@ func UserGetSubmission(ctx echo.Context) error {
 		}
 
 		submissionListRet = append(submissionListRet, param.ObjRspSubmission{
-			ID:       submission.ID.Hex(),
-			Time:     submission.Time,
-			Question: questionRet,
-			File:     fileRet,
-			Option:   submission.Option,
-			Point:    submission.Point,
+			ID:         submission.ID.Hex(),
+			Time:       submission.Time,
+			Question:   questionRet,
+			File:       fileRet,
+			Option:     submission.Option,
+			Point:      submission.Point,
+			AnswerTime: submission.AnswerTime,
 		})
 	}
 	return context.Success(ctx, param.RspUserGetSubmission{Submission: submissionListRet})

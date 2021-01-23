@@ -10,13 +10,14 @@ const colNameSubmission = "submission"
 const PointUnknown = -1.0 // 未批改
 
 type Submission struct {
-	ID       primitive.ObjectID   `bson:"_id"`
-	User     primitive.ObjectID   `bson:"user"`
-	Question primitive.ObjectID   `bson:"question"`
-	Time     int64                `bson:"time"`
-	File     []primitive.ObjectID `bson:"file"`
-	Option   [][]int              `bson:"option"`
-	Point    float64              `bson:"point"`
+	ID         primitive.ObjectID   `bson:"_id"`
+	User       primitive.ObjectID   `bson:"user"`
+	Question   primitive.ObjectID   `bson:"question"`
+	Time       int64                `bson:"time"`
+	File       []primitive.ObjectID `bson:"file"`
+	Option     [][]int              `bson:"option"`
+	Point      float64              `bson:"point"`
+	AnswerTime int                  `bson:"answer_time"`
 }
 
 func (m *model) GetSubmissionByUser(userID primitive.ObjectID) ([]Submission, error) {

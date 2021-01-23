@@ -38,7 +38,7 @@ func QuestionGetList(ctx echo.Context) error {
 			nextScene = append(nextScene, scene.Scene.Hex())
 		}
 
-		status := param.StatusUnlock // 未解锁
+		status := param.StatusUnlock          // 未解锁
 		if question.ID == user.LastQuestion { // 正在作答
 			status = param.StatusAnswering
 		}
@@ -94,11 +94,11 @@ func QuestionGetInfo(ctx echo.Context) error {
 	subQuestionRet := make([]param.ObjRspSubQuestion, 0)
 	for _, subQuestion := range question.SubQuestion {
 		subQuestionRet = append(subQuestionRet, param.ObjRspSubQuestion{
-			Type:       subQuestion.Type,
-			Desc:       subQuestion.Desc,
-			Option:     subQuestion.Option,
-			FullPoint:  subQuestion.FullPoint,
-			PartPoint:  subQuestion.PartPoint,
+			Type:      subQuestion.Type,
+			Desc:      subQuestion.Desc,
+			Option:    subQuestion.Option,
+			FullPoint: subQuestion.FullPoint,
+			PartPoint: subQuestion.PartPoint,
 		})
 	}
 
@@ -225,7 +225,7 @@ func validateSubmission(req param.ReqQuestionAddSubmission, question model.Quest
 // 判断问题是否已超时
 func isQuestionTimedOut(user model.User, question model.Question) bool {
 	return time.Now().After(time.Unix(user.StartTime, 0).
-		Add(time.Second * time.Duration(question.TimeLimit + 10)))
+		Add(time.Second * time.Duration(question.TimeLimit+10)))
 }
 
 func QuestionAddSubmission(ctx echo.Context) error {
@@ -299,17 +299,18 @@ func QuestionAddSubmission(ctx echo.Context) error {
 			return context.Error(ctx, http.StatusInternalServerError, "failed to get file info", err)
 		}
 		if fileObj.User != userID {
-			return context.Error(ctx, http.StatusBadRequest, "you cannot use file " + file.Hex(), nil)
+			return context.Error(ctx, http.StatusBadRequest, "you cannot use file "+file.Hex(), nil)
 		}
 	}
 
 	submission := model.Submission{
-		User:     userID,
-		Question: id,
-		Time:     time.Now().Unix(),
-		File:     fileID,
-		Option:   req.Option,
-		Point:    model.PointUnknown,
+		User:       userID,
+		Question:   id,
+		Time:       time.Now().Unix(),
+		File:       fileID,
+		Option:     req.Option,
+		Point:      model.PointUnknown,
+		AnswerTime: int(time.Now().Sub(time.Unix(user.StartTime, 0)) / time.Second),
 	}
 	if isAllChoice(question) { // 选择题自动批改
 		submission.Point = getPoint(submission.Option, question)
