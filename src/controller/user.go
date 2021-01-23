@@ -47,10 +47,7 @@ func UserGetPublicKey(ctx echo.Context) error {
 			return context.Error(ctx, http.StatusInternalServerError, "failed on model", err)
 		}
 	}
-	publicKey, err := x509.MarshalPKIXPublicKey(&key.PublicKey)
-	if err != nil {
-		return context.Error(ctx, http.StatusInternalServerError, "failed to generate rsa key", err)
-	}
+	publicKey := x509.MarshalPKCS1PublicKey(&key.PublicKey)
 	publicKeyPem := pem.EncodeToMemory(&pem.Block{
 		Type:  "RSA PUBLIC KEY",
 		Bytes: publicKey,
