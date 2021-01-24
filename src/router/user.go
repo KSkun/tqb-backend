@@ -14,5 +14,6 @@ func initUserRouter(g *echo.Group) {
 	g.POST("/email_verify", controller.UserVerifyEmail)
 	g.PUT("/password", controller.UserChangePassword)
 	g.GET("", controller.UserGetInfo, middleware.JWTMiddleware())
+	g.GET("/unlocked_scene", controller.UserGetUnlockedScene, middleware.JWTMiddleware())
 	g.GET("/submission", controller.UserGetSubmission, middleware.JWTMiddleware())
 }

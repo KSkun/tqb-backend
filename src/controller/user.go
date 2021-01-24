@@ -315,6 +315,39 @@ func UserGetInfo(ctx echo.Context) error {
 	})
 }
 
+func UserGetUnlockedScene(ctx echo.Context) error {
+	idHex := context.GetUserFromJWT(ctx)
+	id, _ := primitive.ObjectIDFromHex(idHex)
+
+	m := model.GetModel()
+	defer m.Close()
+
+	user, err := m.GetUser(id)
+	if err != nil {
+		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
+	}
+
+	sceneRet := make([]param.ObjRspUserScene, 0)
+	for _, id := range user.UnlockedScene {
+		scene, err := m.GetScene(id)
+		if err != nil {
+			return context.Error(ctx, http.StatusInternalServerError, "failed to get scene info", err)
+		}
+
+		sceneRet = append(sceneRet, param.ObjRspUserScene{
+			ID:           scene.ID.Hex(),
+			Title:        scene.Title,
+			Text:         scene.Text,
+			FromQuestion: scene.FromQuestion.Hex(),
+			NextQuestion: scene.NextQuestion.Hex(),
+		})
+	}
+
+	return context.Success(ctx, param.RspUserGetUnlockedScene{
+		Scene: sceneRet,
+	})
+}
+
 func UserGetSubmission(ctx echo.Context) error {
 	idHex := context.GetUserFromJWT(ctx)
 	id, _ := primitive.ObjectIDFromHex(idHex)

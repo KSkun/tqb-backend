@@ -53,6 +53,18 @@ type RspUserGetInfo struct {
 	FinishedQuestion []string `json:"finished_question"`
 }
 
+type ObjRspUserScene struct {
+	ID           string `json:"_id"`
+	Title        string `json:"title"`
+	Text         string `json:"text"`
+	FromQuestion string `json:"from_question"`
+	NextQuestion string `json:"next_question"`
+}
+
+type RspUserGetUnlockedScene struct {
+	Scene []ObjRspUserScene `json:"scene"`
+}
+
 type ObjRspSubmissionQuestion struct {
 	ID    string `json:"_id"`
 	Title string `json:"title"`
