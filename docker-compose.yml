@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   mongo:
-    image: mongo:3.6.3
+    image: mongo:latest
     volumes:
       - ./data/mongo:/data/db
       - /etc/localtime:/etc/localtime:ro
@@ -17,7 +17,7 @@ services:
     networks:
       - tqb-backend
   redis:
-    image: redis:6.0.10-alpine
+    image: redis:latest
     expose:
       - "6379"
     environment:
