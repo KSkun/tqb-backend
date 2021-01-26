@@ -76,7 +76,7 @@ func QuestionGetInfo(ctx echo.Context) error {
 	}
 	scene, err := m.GetScene(user.LastScene)
 	if err != nil {
-		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
+		return context.Error(ctx, http.StatusInternalServerError, "failed to get scene info", err)
 	}
 	finished, err := m.UserHasFinishedQuestion(userID, id)
 	if err != nil {
