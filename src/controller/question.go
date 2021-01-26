@@ -74,6 +74,9 @@ func QuestionGetInfo(ctx echo.Context) error {
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
+	if user.LastScene == model.NullID {
+		return context.Error(ctx, http.StatusForbidden, "you have to select a subject first", nil)
+	}
 	scene, err := m.GetScene(user.LastScene)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get scene info", err)
