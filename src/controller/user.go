@@ -122,6 +122,15 @@ func UserAddUser(ctx echo.Context) error {
 	m := model.GetModel()
 	defer m.Close()
 
+	// 检查邮箱是否已使用
+	_, found, err := m.GetUserByEmail(req.Email)
+	if err != nil {
+		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
+	}
+	if !found {
+		return context.Error(ctx, http.StatusForbidden, "this email has been occupied", nil)
+	}
+
 	key, found, err := model.GetModel().GetPrivateKey(req.Email)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
