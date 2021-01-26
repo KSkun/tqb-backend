@@ -29,7 +29,7 @@ func Success(c echo.Context, data interface{}) error {
 func Error(c echo.Context, status int, data string, err error) error {
 	ret := Response{
 		Data:    nil,
-		Error:   data,
+		Message: data,
 		Success: false,
 	}
 
