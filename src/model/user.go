@@ -56,6 +56,20 @@ func (m *model) GetUserByEmail(email string) (User, bool, error) {
 	return user, true, nil
 }
 
+func (m *model) GetUserList() ([]User, error) {
+	c := m.db.Collection(colNameUser)
+	userList := make([]User, 0)
+	result, err := c.Find(m.ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	err = result.All(m.ctx, &userList)
+	if err != nil {
+		return nil, err
+	}
+	return userList, nil
+}
+
 func (m *model) AddUser(user User) (primitive.ObjectID, error) {
 	c := m.db.Collection(colNameUser)
 	userID := primitive.NewObjectID()

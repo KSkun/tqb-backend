@@ -22,6 +22,7 @@ type Model interface {
 	// user
 	GetUser(id primitive.ObjectID) (User, error)
 	GetUserByEmail(email string) (User, bool, error)
+	GetUserList() ([]User, error)
 	AddUser(user User) (primitive.ObjectID, error)
 	UpdateUser(id primitive.ObjectID, toUpdate bson.M) error
 	AddPrivateKey(email string, key *rsa.PrivateKey) error
@@ -49,6 +50,9 @@ type Model interface {
 	// file
 	AddFile(file File) (primitive.ObjectID, error)
 	GetFile(id primitive.ObjectID) (File, error)
+	// rank
+	SaveRankList(list RankList) error
+	GetRankList() (RankList, error)
 }
 
 type model struct {

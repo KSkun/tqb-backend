@@ -336,3 +336,26 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 获取已上传的 PDF 文件，仅可获取用户自己上传的文件。
 
 响应：文件
+
+### \*获取排行榜 GET /rank
+
+获取排行榜信息。
+
+响应：
+
+```json
+{
+    "rank": [
+        {
+            "username": "第一名用户名",
+            "email": "第一名邮箱",
+            "point": 750.0 // 第一名得分
+        },
+        {
+            "username": "第二名用户名",
+            "email": "第一名邮箱",
+            "point": 749.0 // 第一名得分
+        }
+    ]
+}
+```

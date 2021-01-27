@@ -26,4 +26,7 @@ func InitRouter(g *echo.Group) {
 func initIndexRouter(g *echo.Group) {
 	g.POST("/file", controller.FileUpload, middleware.JWTMiddleware())
 	g.GET("/file/:id", controller.FileGet, middleware.JWTMiddleware())
+
+	go controller.RankListWorker() // 维护排行榜
+	g.GET("/rank", controller.RankGetList, middleware.JWTMiddleware())
 }
