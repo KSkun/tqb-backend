@@ -34,7 +34,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 
 ### 获取登录公钥 GET /user/public_key?email={邮箱地址}
 
-为了保证密码安全，登录时用 RSA 加密密码传输，获取一次公钥有效期 15 分钟。
+为了保证密码安全，登录时用 RSA 加密密码传输，获取一次公钥有效期 15 分钟。公钥格式为 PKSC1，加密应使用 RSA-OAEP，哈希算法选择 SHA-256。
 
 响应：
 
@@ -171,6 +171,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 ```
 
 ## 题目相关
+
+### 业务逻辑说明
+
+用户答题流程如下：
+
+查看学科选择界面→选择学科→进入学科入口剧情（进入前 unlock，unlock 时更新 last_scene）
+
+阅读剧情→开始答题（start，此时更新 last_question）→答题结束→选择剧情
+
+最后一个剧情结束后将重置用户 last_scene 与 last_question。
+
+涉及 ID 的地方，`000000000000000000000000`（24 个 0）代表 null。
 
 ### \*获取学科列表 GET /subject
 
