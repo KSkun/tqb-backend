@@ -170,6 +170,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 }
 ```
 
+### \*重置用户状态 PUT /user/refresh
+
+重置用户做题的状态，将 last_scene 和 last_question 设置为 null。
+
+响应：无
+
 ## 题目相关
 
 ### 业务逻辑说明

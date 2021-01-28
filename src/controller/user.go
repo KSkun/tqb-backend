@@ -397,3 +397,21 @@ func UserGetSubmission(ctx echo.Context) error {
 	}
 	return context.Success(ctx, param.RspUserGetSubmission{Submission: submissionListRet})
 }
+
+func UserRefreshStatus(ctx echo.Context) error {
+	idHex := context.GetUserFromJWT(ctx)
+	id, _ := primitive.ObjectIDFromHex(idHex)
+
+	m := model.GetModel()
+	defer m.Close()
+
+	err := m.UpdateUser(id, bson.M{
+		"last_scene":      model.NullID,
+		"last_question":   model.NullID,
+		"l_last_question": model.NullID,
+	})
+	if err != nil {
+		return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)
+	}
+	return context.Success(ctx, nil)
+}
