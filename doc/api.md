@@ -365,8 +365,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
         },
         {
             "username": "第二名用户名",
-            "email": "第一名邮箱",
-            "point": 749.0 // 第一名得分
+            "email": "第二名邮箱",
+            "point": 749.0 // 第二名得分
         }
     ]
 }
