@@ -405,11 +405,17 @@ func UserRefreshStatus(ctx echo.Context) error {
 	m := model.GetModel()
 	defer m.Close()
 
-	err := m.UpdateUser(id, bson.M{
-		"last_scene":      model.NullID,
-		"last_question":   model.NullID,
-		"l_last_question": model.NullID,
+	err := m.UpdateUser(id, bson.M{ // 重置用户答题记录
+		"last_scene":        model.NullID,
+		"last_question":     model.NullID,
+		"l_last_question":   model.NullID,
+		"unlocked_scene":    make([]primitive.ObjectID, 0),
+		"finished_question": make([]primitive.ObjectID, 0),
 	})
+	if err != nil {
+		return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)
+	}
+	err = m.DeleteSubmissionByUser(id) // 删除用户提交记录
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)
 	}

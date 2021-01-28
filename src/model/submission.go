@@ -41,3 +41,9 @@ func (m *model) AddSubmission(submission Submission) (primitive.ObjectID, error)
 	_, err := c.InsertOne(m.ctx, submission)
 	return id, err
 }
+
+func (m *model) DeleteSubmissionByUser(userID primitive.ObjectID) error {
+	c := m.db.Collection(colNameSubmission)
+	_, err := c.DeleteMany(m.ctx, bson.M{"user": userID})
+	return err
+}

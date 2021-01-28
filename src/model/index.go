@@ -47,6 +47,7 @@ type Model interface {
 	// submission
 	GetSubmissionByUser(userID primitive.ObjectID) ([]Submission, error)
 	AddSubmission(submission Submission) (primitive.ObjectID, error)
+	DeleteSubmissionByUser(userID primitive.ObjectID) error
 	// file
 	AddFile(file File) (primitive.ObjectID, error)
 	GetFile(id primitive.ObjectID) (File, error)
