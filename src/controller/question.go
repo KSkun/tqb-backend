@@ -304,6 +304,9 @@ func QuestionAddSubmission(ctx echo.Context) error {
 
 	// 检查文件是否都是用户自己的
 	for _, file := range fileID {
+		if file == model.NullID {
+			continue
+		}
 		fileObj, err := m.GetFile(file)
 		if err != nil {
 			return context.Error(ctx, http.StatusInternalServerError, "failed to get file info", err)
