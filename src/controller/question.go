@@ -161,6 +161,13 @@ func QuestionSetStart(ctx echo.Context) error {
 	if user.LastQuestion == id {
 		return context.Error(ctx, http.StatusBadRequest, "you have already started this question", nil)
 	}
+	finished, err := m.UserHasFinishedQuestion(userID, id)
+	if err != nil {
+		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
+	}
+	if finished {
+		return context.Success(ctx, nil)
+	}
 
 	err = m.SetUserLastQuestion(userID, id)
 	if err != nil {
