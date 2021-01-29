@@ -5,6 +5,7 @@ import (
 	"github.com/KSkun/tqb-backend/util/context"
 	"github.com/KSkun/tqb-backend/util/log"
 	"github.com/labstack/echo/v4"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 	"sort"
@@ -23,7 +24,7 @@ func RankGetList(ctx echo.Context) error {
 }
 
 func getUserPoint(m model.Model, userID primitive.ObjectID) (float64, error) {
-	submissionList, err := m.GetSubmissionByUser(userID)
+	submissionList, err := m.GetSubmissionByUser(userID, bson.M{})
 	if err != nil {
 		return 0, err
 	}
