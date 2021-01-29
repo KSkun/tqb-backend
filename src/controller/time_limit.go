@@ -75,15 +75,15 @@ func timedOutWorker(userID primitive.ObjectID, questionID primitive.ObjectID) {
 			break
 		}
 	}
-	if !flagHasOtherOption { // 如果没有其他路径可走，则本题判为零分
-		err = addBlankSubmission(m, userID, questionID)
-		if err != nil {
-			log.Logger.Error(err)
-			return
-		}
+	err = addBlankSubmission(m, userID, questionID)
+	if err != nil {
+		log.Logger.Error(err)
 		return
 	}
 
+	if !flagHasOtherOption { // 如果没有其他路径可走，则继续作答
+		return
+	}
 	// 如果存在其他路径，则后退一步
 	err = m.SetUserBackQuestion(userID)
 	if err != nil {
