@@ -18,11 +18,13 @@ type Submission struct {
 	Option     [][]int              `bson:"option"`
 	Point      float64              `bson:"point"`
 	AnswerTime int                  `bson:"answer_time"`
+	IsTimeOut  bool                 `bson:"is_time_out"`
 }
 
-func (m *model) GetSubmissionByUser(userID primitive.ObjectID) ([]Submission, error) {
+func (m *model) GetSubmissionByUser(userID primitive.ObjectID, filter bson.M) ([]Submission, error) {
 	c := m.db.Collection(colNameSubmission)
-	result, err := c.Find(m.ctx, bson.M{"user": userID})
+	filter["user"] = userID
+	result, err := c.Find(m.ctx, filter)
 	if err != nil {
 		return nil, err
 	}

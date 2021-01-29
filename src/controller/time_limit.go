@@ -9,12 +9,14 @@ import (
 
 func addBlankSubmission(m model.Model, userID primitive.ObjectID, questionID primitive.ObjectID) error {
 	submission := model.Submission{
-		User:     userID,
-		Question: questionID,
-		Time:     time.Now().Unix(),
-		File:     nil,
-		Option:   nil,
-		Point:    0.0,
+		User:       userID,
+		Question:   questionID,
+		Time:       time.Now().Unix(),
+		File:       nil,
+		Option:     nil,
+		Point:      0.0,
+		AnswerTime: 0,
+		IsTimeOut:  true,
 	}
 	_, err := m.AddSubmission(submission)
 	if err != nil {
@@ -39,7 +41,7 @@ func timedOutWorker(userID primitive.ObjectID, questionID primitive.ObjectID) {
 		return
 	}
 
-	time.Sleep(time.Second * time.Duration(question.TimeLimit + 10))
+	time.Sleep(time.Second * time.Duration(question.TimeLimit+10))
 
 	m = model.GetModel()
 	finished, err := m.UserHasFinishedQuestion(userID, questionID)

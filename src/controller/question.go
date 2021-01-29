@@ -324,6 +324,7 @@ func QuestionAddSubmission(ctx echo.Context) error {
 		Option:     req.Option,
 		Point:      model.PointUnknown,
 		AnswerTime: int(time.Now().Sub(time.Unix(user.StartTime, 0)) / time.Second),
+		IsTimeOut:  false,
 	}
 	if isAllChoice(question) { // 选择题自动批改
 		submission.Point = getPoint(submission.Option, question)

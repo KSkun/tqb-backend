@@ -45,7 +45,7 @@ type Model interface {
 	GetQuestionList() ([]Question, error)
 	GetQuestion(id primitive.ObjectID) (Question, error)
 	// submission
-	GetSubmissionByUser(userID primitive.ObjectID) ([]Submission, error)
+	GetSubmissionByUser(userID primitive.ObjectID, filter bson.M) ([]Submission, error)
 	AddSubmission(submission Submission) (primitive.ObjectID, error)
 	DeleteSubmissionByUser(userID primitive.ObjectID) error
 	// file

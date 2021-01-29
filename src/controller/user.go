@@ -358,13 +358,30 @@ func UserGetUnlockedScene(ctx echo.Context) error {
 }
 
 func UserGetSubmission(ctx echo.Context) error {
+	req := param.ReqUserGetSubmission{}
+	if err := ctx.Bind(&req); err != nil {
+		return context.Error(ctx, http.StatusBadRequest, "bad request", err)
+	}
+	if err := ctx.Validate(req); err != nil {
+		return context.Error(ctx, http.StatusBadRequest, "bad request", err)
+	}
+
+	filter := bson.M{}
+	if len(req.Question) > 0 {
+		questionID, err := primitive.ObjectIDFromHex(req.Question)
+		if err != nil {
+			return context.Error(ctx, http.StatusBadRequest, "invalid question id", err)
+		}
+		filter["question"] = questionID
+	}
+
 	idHex := context.GetUserFromJWT(ctx)
 	id, _ := primitive.ObjectIDFromHex(idHex)
 
 	m := model.GetModel()
 	defer m.Close()
 
-	submissionList, err := m.GetSubmissionByUser(id)
+	submissionList, err := m.GetSubmissionByUser(id, filter)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get submission info", err)
 	}
@@ -393,6 +410,7 @@ func UserGetSubmission(ctx echo.Context) error {
 			Option:     submission.Option,
 			Point:      submission.Point,
 			AnswerTime: submission.AnswerTime,
+			IsTimeOut:  submission.IsTimeOut,
 		})
 	}
 	return context.Success(ctx, param.RspUserGetSubmission{Submission: submissionListRet})

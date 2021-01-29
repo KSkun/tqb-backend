@@ -56,6 +56,7 @@ next_scene 内的对象：
 - option `Array<int>` 选项索引（仅选择题）
 - point `float` 提交获得分数，-1 为未评分
 - answer_time `int` 答题用时，单位为秒
+- is_time_out `bool` 是否为超时提交
 
 ## 学科 subject
 

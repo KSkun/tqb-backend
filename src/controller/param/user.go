@@ -78,8 +78,13 @@ type ObjRspSubmission struct {
 	Option     [][]int                  `json:"option"`
 	Point      float64                  `json:"point"`
 	AnswerTime int                      `json:"answer_time"`
+	IsTimeOut  bool                     `json:"is_time_out"`
 }
 
 type RspUserGetSubmission struct {
 	Submission []ObjRspSubmission `json:"submission"`
+}
+
+type ReqUserGetSubmission struct {
+	Question string `json:"question"`
 }

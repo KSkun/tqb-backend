@@ -125,9 +125,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 }
 ```
 
-### \*获取提交 GET /user/submission
+### \*获取提交 GET /user/submission?question=\{题目ID\}
 
-获取用户自己所有的提交。
+获取用户自己所有的提交。支持按题目筛选提交，请求参数 question 为**可选项**。
 
 响应：
 
@@ -144,7 +144,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
             "file": ["提交文件ID（仅上传 PDF）"],
             "option": [[0, 1]], // 提交选项索引（仅选择题）
             "point": 5.0, // 该题得分，-1 为未评分
-            "answer_time": 0 // 答题用时
+            "answer_time": 0, // 答题用时，单位为秒
+            "is_time_out": false // 是否为超时提交
         }
     ]
 }
