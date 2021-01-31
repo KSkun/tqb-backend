@@ -127,7 +127,7 @@ func UserAddUser(ctx echo.Context) error {
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
-	if !found {
+	if found {
 		return context.Error(ctx, http.StatusForbidden, "this email has been occupied", nil)
 	}
 
