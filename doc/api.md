@@ -71,13 +71,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 }
 ```
 
-响应：
-
-```json
-{
-    "_id": "用户ID"
-}
-```
+响应：无
 
 ### 发送验证邮件 GET /user/email_verify?email={邮箱地址}
 
@@ -162,7 +156,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
     "_id": "用户ID",
     "username": "用户名",
     "email": "邮箱",
-    "is_email_verified": true, // 邮箱是否验证
     "last_question": "最后题目ID",
     "last_scene": "最后剧情ID",
     "start_time": 1610880000, // 最后做题开始时间

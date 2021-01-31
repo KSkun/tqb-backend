@@ -3,6 +3,7 @@ package model
 import (
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/json"
 	"fmt"
 	"github.com/KSkun/tqb-backend/util/log"
 	"github.com/go-redis/redis/v7"
@@ -20,21 +21,22 @@ const (
 	keyVerifyID     = "verify_id:%s"
 	timeVerifyEmail = time.Minute // 1 min
 	keyVerifyEmail  = "verify_email:%s"
+	keyUserInfo     = "user_info:%s"
+	timeUserInfo    = time.Minute * 15 // 15 min
 )
 
 type User struct {
-	ID               primitive.ObjectID   `bson:"_id"`
-	Username         string               `bson:"username"`
-	Password         string               `bson:"password"`
-	Email            string               `bson:"email"`
-	IsEmailVerified  bool                 `bson:"is_email_verified"`
-	LastQuestion     primitive.ObjectID   `bson:"last_question"`
-	LLastQuestion    primitive.ObjectID   `bson:"l_last_question"`
-	LastScene        primitive.ObjectID   `bson:"last_scene"`
-	StartTime        int64                `bson:"start_time"`
-	UnlockedScene    []primitive.ObjectID `bson:"unlocked_scene"`
-	FinishedQuestion []primitive.ObjectID `bson:"finished_question"`
-	CompleteCount    int                  `bson:"complete_count"`
+	ID               primitive.ObjectID   `bson:"_id" json:"-"`
+	Username         string               `bson:"username" json:"username"`
+	Password         string               `bson:"password" json:"password"`
+	Email            string               `bson:"email" json:"email"`
+	LastQuestion     primitive.ObjectID   `bson:"last_question" json:"-"`
+	LLastQuestion    primitive.ObjectID   `bson:"l_last_question" json:"-"`
+	LastScene        primitive.ObjectID   `bson:"last_scene" json:"-"`
+	StartTime        int64                `bson:"start_time" json:"-"`
+	UnlockedScene    []primitive.ObjectID `bson:"unlocked_scene" json:"-"`
+	FinishedQuestion []primitive.ObjectID `bson:"finished_question" json:"-"`
+	CompleteCount    int                  `bson:"complete_count" json:"-"`
 }
 
 func (m *model) GetUser(id primitive.ObjectID) (User, error) {
@@ -230,4 +232,38 @@ func (m *model) UserIsAllUnlocked(id primitive.ObjectID) (bool, error) {
 		return false, result.Err()
 	}
 	return true, nil
+}
+
+func (m *model) AddTempUserInfo(user User) error {
+	userStr, err := json.Marshal(user)
+	if err != nil {
+		return err
+	}
+	result := redisClient.Set(fmt.Sprintf(keyUserInfo, user.Email), string(userStr), timeUserInfo)
+	if result.Err() != nil {
+		return result.Err()
+	}
+	return nil
+}
+
+func (m *model) GetTempUserInfo(email string) (User, bool, error) {
+	result := redisClient.Get(fmt.Sprintf(keyUserInfo, email))
+	if result.Err() == redis.Nil {
+		return User{}, false, nil
+	}
+	if result.Err() != nil {
+		return User{}, false, result.Err()
+	}
+	user := User{}
+	err := json.Unmarshal([]byte(result.Val()), &user)
+	if err != nil {
+		return User{}, false, err
+	}
+	user.LLastQuestion = primitive.ObjectID{}
+	user.LastQuestion = primitive.ObjectID{}
+	user.LastScene = primitive.ObjectID{}
+	user.CompleteCount = 0
+	user.FinishedQuestion = make([]primitive.ObjectID, 0)
+	user.UnlockedScene = make([]primitive.ObjectID, 0)
+	return user, true, nil
 }

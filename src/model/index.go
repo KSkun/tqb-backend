@@ -38,6 +38,8 @@ type Model interface {
 	UserHasFinishedQuestion(id primitive.ObjectID, questionID primitive.ObjectID) (bool, error)
 	IncUserCompleteCount(id primitive.ObjectID) error
 	UserIsAllUnlocked(id primitive.ObjectID) (bool, error)
+	AddTempUserInfo(user User) error
+	GetTempUserInfo(email string) (User, bool, error)
 	// subject
 	GetSubjectList() ([]Subject, error)
 	// scene

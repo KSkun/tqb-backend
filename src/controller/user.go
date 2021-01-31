@@ -74,9 +74,6 @@ func UserGetToken(ctx echo.Context) error {
 	if !found {
 		return context.Error(ctx, http.StatusBadRequest, "wrong password or user not found", nil)
 	}
-	if !user.IsEmailVerified {
-		return context.Error(ctx, http.StatusBadRequest, "please verify your email first", nil)
-	}
 
 	key, found, err := m.GetPrivateKey(req.Email)
 	if err != nil {
@@ -151,16 +148,12 @@ func UserAddUser(ctx echo.Context) error {
 		Username:         req.Username,
 		Password:         string(pwEncrypt),
 		Email:            req.Email,
-		IsEmailVerified:  false,
-		UnlockedScene:    make([]primitive.ObjectID, 0),
-		FinishedQuestion: make([]primitive.ObjectID, 0),
-		CompleteCount:    0,
 	}
-	id, err := m.AddUser(user)
+	err = m.AddTempUserInfo(user)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)
 	}
-	return context.Success(ctx, param.RspUserAddUser{ID: id.Hex()})
+	return context.Success(ctx, nil)
 }
 
 func UserSendVerifyMail(ctx echo.Context) error {
@@ -175,7 +168,7 @@ func UserSendVerifyMail(ctx echo.Context) error {
 	m := model.GetModel()
 	defer m.Close()
 
-	user, found, err := m.GetUserByEmail(req.Email)
+	user, found, err := m.GetTempUserInfo(req.Email)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
@@ -218,21 +211,26 @@ func UserVerifyEmail(ctx echo.Context) error {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
 	if !found {
-		return context.Error(ctx, http.StatusBadRequest, "invalid verify id", nil)
+		return context.Error(ctx, http.StatusBadRequest, "invalid verify id or expired", nil)
 	}
 
-	user, found, err := m.GetUserByEmail(email)
+	_, found, err = m.GetUserByEmail(email)
+	if err != nil {
+		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
+	}
+	if found {
+		return context.Error(ctx, http.StatusBadRequest, "the email has been occupied", nil)
+	}
+
+	user, found, err := m.GetTempUserInfo(email)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
 	if !found {
-		return context.Error(ctx, http.StatusBadRequest, "invalid verify id", nil)
-	}
-	if user.IsEmailVerified {
-		return context.Error(ctx, http.StatusBadRequest, "your email has been verified", nil)
+		return context.Error(ctx, http.StatusBadRequest, "invalid verify id or expired", nil)
 	}
 
-	err = m.UpdateUser(user.ID, bson.M{"is_email_verified": true})
+	_, err = m.AddUser(user)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)
 	}
@@ -316,7 +314,6 @@ func UserGetInfo(ctx echo.Context) error {
 		ID:               user.ID.Hex(),
 		Username:         user.Username,
 		Email:            user.Email,
-		IsEmailVerified:  user.IsEmailVerified,
 		LastQuestion:     user.LastQuestion.Hex(),
 		LastScene:        user.LastScene.Hex(),
 		StartTime:        user.StartTime,
