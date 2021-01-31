@@ -30,6 +30,7 @@ type Question struct {
 	ID          primitive.ObjectID `bson:"_id"`
 	Title       string             `bson:"title"`
 	Desc        string             `bson:"desc"`
+	Statement   string             `bson:"statement"`
 	SubQuestion []SubQuestion      `bson:"sub_question"`
 	Author      string             `bson:"author"`
 	Audio       string             `bson:"audio"`

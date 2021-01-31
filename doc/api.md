@@ -262,6 +262,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
         {
             "_id": "题目ID",
             "title": "题目标题",
+            "desc": "描述",
             "next_scene": ["下一剧情ID1", "下一剧情ID2"],
             "status": 0, // 题目状态：0 未解锁，1 正在作答，2 已提交
         }
@@ -279,6 +280,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
 {
     "title": "标题",
     "desc": "描述",
+    "statement": "题面",
     "sub_question": [
         {
             "type": 2,

@@ -49,6 +49,7 @@ func QuestionGetList(ctx echo.Context) error {
 		ret = append(ret, param.ObjRspQuestion{
 			ID:        question.ID.Hex(),
 			Title:     question.Title,
+			Desc:      question.Desc,
 			NextScene: nextScene,
 			Status:    status,
 		})
@@ -126,6 +127,7 @@ func QuestionGetInfo(ctx echo.Context) error {
 	return context.Success(ctx, param.RspQuestionGetInfo{
 		Title:       question.Title,
 		Desc:        question.Desc,
+		Statement:   question.Statement,
 		SubQuestion: subQuestionRet,
 		Author:      question.Author,
 		Audio:       question.Audio,

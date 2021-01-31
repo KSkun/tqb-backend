@@ -9,6 +9,7 @@ const (
 type ObjRspQuestion struct {
 	ID        string   `json:"_id"`
 	Title     string   `json:"title"`
+	Desc      string   `json:"desc"`
 	NextScene []string `json:"next_scene"`
 	Status    int      `json:"status"`
 }
@@ -33,6 +34,7 @@ type ObjRspNextScene struct {
 type RspQuestionGetInfo struct {
 	Title       string              `json:"title"`
 	Desc        string              `json:"desc"`
+	Statement   string              `json:"statement"`
 	SubQuestion []ObjRspSubQuestion `json:"sub_question"`
 	Author      string              `json:"author"`
 	Audio       string              `json:"audio"`
