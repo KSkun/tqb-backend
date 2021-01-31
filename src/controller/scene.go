@@ -93,15 +93,15 @@ func SceneSetUnlock(ctx echo.Context) error {
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
-	if user.LastQuestion != scene.FromQuestion && scene.FromQuestion != model.NullID { // 排除入口剧情
-		return context.Error(ctx, http.StatusForbidden, "you cannot unlock this scene", nil)
-	}
 	finished, err := m.UserHasFinishedQuestion(userID, scene.NextQuestion)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
 	if finished {
 		return context.Success(ctx, nil)
+	}
+	if user.LastQuestion != scene.FromQuestion && scene.FromQuestion != model.NullID { // 排除入口剧情
+		return context.Error(ctx, http.StatusForbidden, "you cannot unlock this scene", nil)
 	}
 
 	err = m.SetUserLastScene(userID, id)
