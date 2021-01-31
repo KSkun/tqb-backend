@@ -78,7 +78,7 @@ func QuestionGetInfo(ctx echo.Context) error {
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
-	if user.CompleteCount < 2 {
+	if user.CompleteCount < 2 && !finished {
 		if user.LastScene == model.NullID {
 			return context.Error(ctx, http.StatusForbidden, "you have to select a subject first", nil)
 		}
@@ -86,7 +86,7 @@ func QuestionGetInfo(ctx echo.Context) error {
 		if err != nil {
 			return context.Error(ctx, http.StatusInternalServerError, "failed to get scene info", err)
 		}
-		if scene.NextQuestion != id && user.LastQuestion != id && !finished {
+		if scene.NextQuestion != id && user.LastQuestion != id {
 			return context.Error(ctx, http.StatusForbidden, "this question is locked", nil)
 		}
 	}
