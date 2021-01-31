@@ -4,6 +4,7 @@ import (
 	"github.com/KSkun/tqb-backend/controller/param"
 	"github.com/KSkun/tqb-backend/model"
 	"github.com/KSkun/tqb-backend/util/context"
+	"github.com/KSkun/tqb-backend/util/log"
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -53,7 +54,11 @@ func SceneGetInfo(ctx echo.Context) error {
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
-	if !unlocked && scene.FromQuestion != model.NullID {
+	allUnlocked, err := m.UserIsAllUnlocked(userID)
+	if err != nil {
+		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
+	}
+	if !unlocked && scene.FromQuestion != model.NullID && !allUnlocked {
 		return context.Error(ctx, http.StatusForbidden, "this scene is locked", nil)
 	}
 
@@ -112,7 +117,12 @@ func SceneSetUnlock(ctx echo.Context) error {
 			"l_last_question": model.NullID,
 		})
 		if err != nil {
-			return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)
+			log.Logger.Error(err)
+		}
+
+		err = m.IncUserCompleteCount(userID)
+		if err != nil {
+			log.Logger.Error(err)
 		}
 	}
 	return context.Success(ctx, nil)

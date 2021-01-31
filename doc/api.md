@@ -167,7 +167,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
     "last_scene": "最后剧情ID",
     "start_time": 1610880000, // 最后做题开始时间
     "unlocked_scene": ["解锁剧情ID"],
-    "finished_question": ["已做答问题ID"]
+    "finished_question": ["已做答问题ID"],
+    "is_all_unlocked": false // 是否解锁所有题目和剧情
 }
 ```
 

@@ -51,6 +51,7 @@ type RspUserGetInfo struct {
 	StartTime        int64    `json:"start_time"`
 	UnlockedScene    []string `json:"unlocked_scene"`
 	FinishedQuestion []string `json:"finished_question"`
+	IsAllUnlocked    bool     `json:"is_all_unlocked"`
 }
 
 type ObjRspUserScene struct {

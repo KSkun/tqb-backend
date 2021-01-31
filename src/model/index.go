@@ -36,6 +36,8 @@ type Model interface {
 	AddUserFinishedQuestion(id primitive.ObjectID, questionID primitive.ObjectID) error
 	UserHasUnlockedScene(id primitive.ObjectID, sceneID primitive.ObjectID) (bool, error)
 	UserHasFinishedQuestion(id primitive.ObjectID, questionID primitive.ObjectID) (bool, error)
+	IncUserCompleteCount(id primitive.ObjectID) error
+	UserIsAllUnlocked(id primitive.ObjectID) (bool, error)
 	// subject
 	GetSubjectList() ([]Subject, error)
 	// scene

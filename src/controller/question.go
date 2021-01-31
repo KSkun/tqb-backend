@@ -85,7 +85,7 @@ func QuestionGetInfo(ctx echo.Context) error {
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
-	if scene.NextQuestion != id && user.LastQuestion != id && !finished {
+	if scene.NextQuestion != id && user.LastQuestion != id && !finished && user.CompleteCount < 2 {
 		return context.Error(ctx, http.StatusForbidden, "this question is locked", nil)
 	}
 

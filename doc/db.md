@@ -12,6 +12,7 @@
 - start_time `int` 最后做题开始时间
 - unlocked_scene `Array<ObjectId>` 已解锁剧情列表
 - finished_question `Array<ObjectId>` 已做答问题列表
+- complete_count `int` 完成周目数
 
 ## 题目 question
 

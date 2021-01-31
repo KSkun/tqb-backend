@@ -154,6 +154,7 @@ func UserAddUser(ctx echo.Context) error {
 		IsEmailVerified:  false,
 		UnlockedScene:    make([]primitive.ObjectID, 0),
 		FinishedQuestion: make([]primitive.ObjectID, 0),
+		CompleteCount:    0,
 	}
 	id, err := m.AddUser(user)
 	if err != nil {
@@ -321,6 +322,7 @@ func UserGetInfo(ctx echo.Context) error {
 		StartTime:        user.StartTime,
 		UnlockedScene:    unlockedScene,
 		FinishedQuestion: finishedQuestion,
+		IsAllUnlocked:    user.CompleteCount >= 2,
 	})
 }
 
@@ -429,6 +431,7 @@ func UserRefreshStatus(ctx echo.Context) error {
 		"l_last_question":   model.NullID,
 		"unlocked_scene":    make([]primitive.ObjectID, 0),
 		"finished_question": make([]primitive.ObjectID, 0),
+		"complete_count":    0,
 	})
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to process user info", err)

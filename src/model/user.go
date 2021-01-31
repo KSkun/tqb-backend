@@ -34,6 +34,7 @@ type User struct {
 	StartTime        int64                `bson:"start_time"`
 	UnlockedScene    []primitive.ObjectID `bson:"unlocked_scene"`
 	FinishedQuestion []primitive.ObjectID `bson:"finished_question"`
+	CompleteCount    int                  `bson:"complete_count"`
 }
 
 func (m *model) GetUser(id primitive.ObjectID) (User, error) {
@@ -209,6 +210,24 @@ func (m *model) UserHasFinishedQuestion(id primitive.ObjectID, questionID primit
 	}
 	if err != nil {
 		return false, err
+	}
+	return true, nil
+}
+
+func (m *model) IncUserCompleteCount(id primitive.ObjectID) error {
+	c := m.db.Collection(colNameUser)
+	_, err := c.UpdateOne(m.ctx, bson.M{"_id": id}, bson.M{"$inc": bson.M{"complete_count": 1}})
+	return err
+}
+
+func (m *model) UserIsAllUnlocked(id primitive.ObjectID) (bool, error) {
+	c := m.db.Collection(colNameUser)
+	result := c.FindOne(m.ctx, bson.M{"_id": id, "complete_count": bson.M{"$gte": 2}})
+	if result.Err() == ErrNotFound {
+		return false, nil
+	}
+	if result.Err() != nil {
+		return false, result.Err()
 	}
 	return true, nil
 }
