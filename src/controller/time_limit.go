@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+const addTime = 3
+
 func addBlankSubmission(m model.Model, userID primitive.ObjectID, questionID primitive.ObjectID) error {
 	submission := model.Submission{
 		User:       userID,
@@ -41,7 +43,7 @@ func timedOutWorker(userID primitive.ObjectID, questionID primitive.ObjectID) {
 		return
 	}
 
-	time.Sleep(time.Second * time.Duration(question.TimeLimit+10))
+	time.Sleep(time.Second * time.Duration(question.TimeLimit+addTime))
 
 	m = model.GetModel()
 	finished, err := m.UserHasFinishedQuestion(userID, questionID)
