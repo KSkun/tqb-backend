@@ -93,6 +93,9 @@ func SceneSetUnlock(ctx echo.Context) error {
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
+	if user.CompleteCount >= 2 {
+		return context.Success(ctx, nil)
+	}
 	finished, err := m.UserHasFinishedQuestion(userID, scene.NextQuestion)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)

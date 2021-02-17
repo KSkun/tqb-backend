@@ -155,6 +155,9 @@ func QuestionSetStart(ctx echo.Context) error {
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
 	}
+	if user.CompleteCount >= 2 {
+		return context.Success(ctx, nil)
+	}
 	scene, err := m.GetScene(user.LastScene)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
@@ -282,6 +285,9 @@ func QuestionAddSubmission(ctx echo.Context) error {
 	user, err := m.GetUser(userID)
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to get user info", err)
+	}
+	if user.CompleteCount >= 2 {
+		return context.Error(ctx, http.StatusForbidden, "you cannot submit after 2 rounds", err)
 	}
 	question, err := m.GetQuestion(id)
 	if err != nil {
