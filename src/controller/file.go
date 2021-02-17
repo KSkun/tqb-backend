@@ -11,9 +11,18 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strings"
+	"path"
 	"time"
 )
+
+var allowExts = map[string]bool{
+	".txt":  true,
+	".pdf":  true,
+	".jpg":  true,
+	".jpeg": true,
+	".png":  true,
+	".bmp":  true,
+}
 
 func FileUpload(ctx echo.Context) error {
 	userIDHex := context.GetUserFromJWT(ctx)
@@ -26,13 +35,14 @@ func FileUpload(ctx echo.Context) error {
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to process file", err)
 	}
-	filename := filenameUUID.String() + ".pdf"
 
 	file, err := ctx.FormFile("file")
 	if err != nil {
 		return context.Error(ctx, http.StatusInternalServerError, "failed to process file", err)
 	}
-	if !strings.HasSuffix(file.Filename, ".pdf") {
+	fileExt := path.Ext(file.Filename)
+	filename := filenameUUID.String() + fileExt
+	if !allowExts[fileExt] {
 		return context.Error(ctx, http.StatusBadRequest, "unsupported file type", err)
 	}
 	srcFile, err := file.Open()
