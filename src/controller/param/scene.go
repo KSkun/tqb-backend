@@ -16,4 +16,5 @@ type RspSceneGetInfo struct {
 	Text         string `json:"text"`
 	FromQuestion string `json:"from_question"`
 	NextQuestion string `json:"next_question"`
+	BGM          string `json:"bgm"`
 }

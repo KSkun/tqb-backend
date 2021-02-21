@@ -233,7 +233,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
     "title": "剧情标题",
     "text": "剧情文本",
     "from_question": "上一题目ID",
-    "next_question": "下一题目ID"
+    "next_question": "下一题目ID",
+    "bgm": "BGM音频文件URL"
 }
 ```
 

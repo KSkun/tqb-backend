@@ -67,6 +67,7 @@ func SceneGetInfo(ctx echo.Context) error {
 		Text:         scene.Text,
 		FromQuestion: scene.FromQuestion.Hex(),
 		NextQuestion: scene.NextQuestion.Hex(),
+		BGM:          scene.BGM,
 	})
 }
 

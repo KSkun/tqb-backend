@@ -46,6 +46,7 @@ next_scene 内的对象：
 - next_question `ObjectId` 下一题目
 - title `string` 剧情标题
 - text `string` 剧情文本
+- bgm `string` BGM 音频文件 URL
 
 ## 提交 submission
 

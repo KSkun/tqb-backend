@@ -13,6 +13,7 @@ type Scene struct {
 	NextQuestion primitive.ObjectID `bson:"next_question"`
 	Title        string             `bson:"title"`
 	Text         string             `bson:"text"`
+	BGM          string             `bson:"bgm"`
 }
 
 func (m *model) GetSceneList() ([]Scene, error) {
