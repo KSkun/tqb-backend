@@ -45,7 +45,7 @@ func doSpecialReplace(ctx echo.Context, sceneText string) (string, error) {
 		return sceneText, err
 	}
 	// 替换用户名
-	sceneText = strings.ReplaceAll(sceneText, "$$$username$$$", user.Username)
+	sceneText = strings.ReplaceAll(sceneText, "!!!username!!!", user.Username)
 	return sceneText, nil
 }
 
