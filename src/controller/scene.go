@@ -9,6 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
+	"strings"
 )
 
 func SceneGetList(ctx echo.Context) error {
@@ -30,6 +31,22 @@ func SceneGetList(ctx echo.Context) error {
 		})
 	}
 	return context.Success(ctx, param.RspSceneGetList{Scene: ret})
+}
+
+func doSpecialReplace(ctx echo.Context, sceneText string) (string, error) {
+	userIDHex := context.GetUserFromJWT(ctx)
+	userID, _ := primitive.ObjectIDFromHex(userIDHex)
+
+	m := model.GetModel()
+	defer m.Close()
+
+	user, err := m.GetUser(userID)
+	if err != nil {
+		return sceneText, err
+	}
+	// 替换用户名
+	sceneText = strings.ReplaceAll(sceneText, "$$$username$$$", user.Username)
+	return sceneText, nil
 }
 
 func SceneGetInfo(ctx echo.Context) error {
@@ -62,9 +79,14 @@ func SceneGetInfo(ctx echo.Context) error {
 		return context.Error(ctx, http.StatusForbidden, "this scene is locked", nil)
 	}
 
+	sceneText, err := doSpecialReplace(ctx, scene.Text)
+	if err != nil {
+		return context.Error(ctx, http.StatusInternalServerError, "failed to generate scene text", err)
+	}
+
 	return context.Success(ctx, param.RspSceneGetInfo{
 		Title:        scene.Title,
-		Text:         scene.Text,
+		Text:         sceneText,
 		FromQuestion: scene.FromQuestion.Hex(),
 		NextQuestion: scene.NextQuestion.Hex(),
 		BGM:          scene.BGM,
