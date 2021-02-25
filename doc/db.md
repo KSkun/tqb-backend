@@ -23,6 +23,7 @@
 - author `string` 出题人
 - audio `string` 音频 URL（仅听力）
 - time_limit `int` 时限，单位为秒
+- next_scene_text `string` 下一剧情列表展示的文本
 - next_scene `Array<#2>` 下一剧情列表
 
 subquestion 内的对象：

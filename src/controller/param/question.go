@@ -32,15 +32,16 @@ type ObjRspNextScene struct {
 }
 
 type RspQuestionGetInfo struct {
-	Title       string              `json:"title"`
-	Desc        string              `json:"desc"`
-	Statement   string              `json:"statement"`
-	SubQuestion []ObjRspSubQuestion `json:"sub_question"`
-	Author      string              `json:"author"`
-	Audio       string              `json:"audio"`
-	TimeLimit   int                 `json:"time_limit"`
-	NextScene   []ObjRspNextScene   `json:"next_scene"`
-	Status      int                 `json:"status"`
+	Title         string              `json:"title"`
+	Desc          string              `json:"desc"`
+	Statement     string              `json:"statement"`
+	SubQuestion   []ObjRspSubQuestion `json:"sub_question"`
+	Author        string              `json:"author"`
+	Audio         string              `json:"audio"`
+	TimeLimit     int                 `json:"time_limit"`
+	NextSceneText string              `json:"next_scene_text"`
+	NextScene     []ObjRspNextScene   `json:"next_scene"`
+	Status        int                 `json:"status"`
 }
 
 type ReqQuestionAddSubmission struct {

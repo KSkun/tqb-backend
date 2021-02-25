@@ -292,6 +292,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3O
     "author": "出题人",
     "audio": "音频URL",
     "time_limit": 300, // 时间限制，单位为秒
+    "next_scene_text": "选择页展示文本",
     "next_scene": [
         {
             "scene": "剧情ID",

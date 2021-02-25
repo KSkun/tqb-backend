@@ -125,15 +125,16 @@ func QuestionGetInfo(ctx echo.Context) error {
 	}
 
 	return context.Success(ctx, param.RspQuestionGetInfo{
-		Title:       question.Title,
-		Desc:        question.Desc,
-		Statement:   question.Statement,
-		SubQuestion: subQuestionRet,
-		Author:      question.Author,
-		Audio:       question.Audio,
-		TimeLimit:   question.TimeLimit,
-		NextScene:   nextSceneRet,
-		Status:      status,
+		Title:         question.Title,
+		Desc:          question.Desc,
+		Statement:     question.Statement,
+		SubQuestion:   subQuestionRet,
+		Author:        question.Author,
+		Audio:         question.Audio,
+		TimeLimit:     question.TimeLimit,
+		NextSceneText: question.NextSceneText,
+		NextScene:     nextSceneRet,
+		Status:        status,
 	})
 }
 

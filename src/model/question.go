@@ -27,15 +27,16 @@ type NextScene struct {
 }
 
 type Question struct {
-	ID          primitive.ObjectID `bson:"_id"`
-	Title       string             `bson:"title"`
-	Desc        string             `bson:"desc"`
-	Statement   string             `bson:"statement"`
-	SubQuestion []SubQuestion      `bson:"sub_question"`
-	Author      string             `bson:"author"`
-	Audio       string             `bson:"audio"`
-	TimeLimit   int                `bson:"time_limit"`
-	NextScene   []NextScene        `bson:"next_scene"`
+	ID            primitive.ObjectID `bson:"_id"`
+	Title         string             `bson:"title"`
+	Desc          string             `bson:"desc"`
+	Statement     string             `bson:"statement"`
+	SubQuestion   []SubQuestion      `bson:"sub_question"`
+	Author        string             `bson:"author"`
+	Audio         string             `bson:"audio"`
+	TimeLimit     int                `bson:"time_limit"`
+	NextSceneText string             `bson:"next_scene_text"`
+	NextScene     []NextScene        `bson:"next_scene"`
 }
 
 func (m *model) GetQuestionList() ([]Question, error) {
