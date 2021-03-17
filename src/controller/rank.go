@@ -46,7 +46,8 @@ func RankListWorker() {
 		userList, err := m.GetUserList()
 		if err != nil {
 			log.Logger.Error(err)
-			return
+			time.Sleep(time.Minute * 5)
+			continue
 		}
 
 		rankList := make([]model.RankEntry, 0)
@@ -54,7 +55,8 @@ func RankListWorker() {
 			point, err := getUserPoint(m, user.ID)
 			if err != nil {
 				log.Logger.Error(err)
-				return
+				time.Sleep(time.Minute * 5)
+				continue
 			}
 
 			rankList = append(rankList, model.RankEntry{
@@ -69,7 +71,8 @@ func RankListWorker() {
 		err = m.SaveRankList(rankListSorted)
 		if err != nil {
 			log.Logger.Error(err)
-			return
+			time.Sleep(time.Minute * 5)
+			continue
 		}
 
 		time.Sleep(time.Minute * 5) // 每 5 min 刷新一次排行榜
